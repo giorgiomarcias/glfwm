@@ -30,6 +30,36 @@ namespace glfwm {
     constexpr   WindowGroupID AllWindowGroupIDs =   std::numeric_limits<WindowGroupID>::max();
     
     /**
+     *  @brief  InputModeBaseType is the base type used to identify the GLFW input modes.
+     */
+    using   InputModeBaseType                   =   int;
+    
+    /**
+     *  @brief  The InputModeType represents the GLFW input modes.
+     */
+    enum class InputModeType : InputModeBaseType {
+        CURSOR                                  =   GLFW_CURSOR,
+        STICKY_KEYS                             =   GLFW_STICKY_KEYS,
+        STICKY_MOUSE_BUTTONS                    =   GLFW_STICKY_MOUSE_BUTTONS
+    };
+    
+    /**
+     *  @brief  InputModeValueBaseType is the base type used to identify the values for GLFW input modes.
+     */
+    using   InputModeValueBaseType              =   int;
+    
+    /**
+     *  @brief  The InputModeValueType represents the GLFW input modes' values.
+     */
+    enum class InputModeValueType : InputModeValueBaseType {
+        CURSOR_NORMAL                           =   GLFW_CURSOR_NORMAL,
+        CURSOR_HIDDEN                           =   GLFW_CURSOR_HIDDEN,
+        CURSOR_DISABLED                         =   GLFW_CURSOR_DISABLED,
+        STICKY_TRUE                             =   GL_TRUE,
+        STICKY_FALSE                            =   GL_FALSE
+    };
+    
+    /**
      *  @brief  ModifierKeyBaseType is the base type used to store a bit set for modifier key types.
      */
     using   ModifierKeyBaseType                 =   int;

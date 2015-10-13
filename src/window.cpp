@@ -378,6 +378,93 @@ namespace glfwm {
     }
     
     /**
+     *  @brief  The getInputMode method returns the current value of an input mode for this Window.
+     *  @param inputMode The input mode to query for its value.
+     *  @return The value of the specified input mode.
+     *  @note   This may only be called from the main thread.
+     */
+    InputModeValueType Window::getInputMode(const InputModeType inputMode) const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (glfwWindow)
+            return static_cast<InputModeValueType>(glfwGetInputMode(glfwWindow, static_cast<InputModeBaseType>(inputMode)));
+        else if (inputMode == InputModeType::CURSOR)
+            return InputModeValueType::CURSOR_NORMAL;
+        else
+            return InputModeValueType::STICKY_FALSE;
+    }
+    
+    /**
+     *  @brief  The setInputMode method sets a new value for the specified input mode.
+     *  @param inputMode      The input mode whose value must be changed.
+     *  @param inputModeValue The value for the specified input mode.
+     *  @note   This may only be called from the main thread.
+     */
+    void Window::setInputMode(const InputModeType inputMode, const InputModeValueType inputModeValue)
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (glfwWindow)
+            glfwSetInputMode(glfwWindow, static_cast<InputModeBaseType>(inputMode), static_cast<InputModeValueBaseType>(inputModeValue));
+    }
+    
+    /**
+     *  @brief  The getKey method returns the last state reported for the specified key.
+     *  @param key The key to query for its last state.
+     *  @return The last state of the specified key.
+     *  @note   This may only be called from the main thread.
+     */
+    ActionType Window::getKey(const KeyType key) const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (glfwWindow)
+            return static_cast<ActionType>(glfwGetKey(glfwWindow, static_cast<KeyBaseType>(key)));
+        else
+            return ActionType::NONE;
+    }
+    
+    /**
+     *  @brief  The getMouseButton method returns the last state reported for the specified mouse button.
+     *  @param mouseButton  The mouse button to query for its last state.
+     *  @return The last state of the specified mouse button.
+     *  @note   This may only be called from the main thread.
+     */
+    ActionType Window::getMouseButton(const MouseButtonType mouseButton) const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (glfwWindow)
+            return static_cast<ActionType>(glfwGetMouseButton(glfwWindow, static_cast<MouseButtonBaseType>(mouseButton)));
+        else
+            return ActionType::NONE;
+    }
+    
+    /**
+     *  @brief  The setCursor method sets the cursor shape to be used when the cursor is over this Window area.
+     *  @param cursor The cursor to set. If a null pointer is passed, the default arrow cursor is set.
+     *  @note   This may only be called from the main thread.
+     */
+    void Window::setCursor(GLFWcursor *cursor)
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (glfwWindow)
+            glfwSetCursor(glfwWindow, cursor);
+    }
+    
+    /**
      *    @brief  The getCursorPosition method returns the cursor position, in screen coordinates, relative to
      *            the upper left corner of this window.
      *    @param x The x-coordinate of the cursor.
@@ -524,6 +611,40 @@ namespace glfwm {
 #endif
         if (glfwWindow)
             glfwSetWindowUserPointer(glfwWindow, pointer);
+    }
+    
+    /**
+     *  @brief  The getClipboardString method returns the system clipboard text, if any.
+     *  @param text The output system clipboard text.
+     *  @note   This may only be called from the main thread.
+     */
+    void Window::getClipboardString(std::string &text) const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        text.clear();
+        if (glfwWindow) {
+            const char * t = glfwGetClipboardString(glfwWindow);
+            if (t)
+                text = t;
+        }
+    }
+    
+    /**
+     *  @brief  The setClipboardString method sets the system clipboard text.
+     *  @param text The system clipboard text to set.
+     *  @note   This may only be called from the main thread.
+     */
+    void Window::setClipboardString(const std::string &text)
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (glfwWindow)
+            glfwSetClipboardString(glfwWindow, text.c_str());
     }
     
     /**

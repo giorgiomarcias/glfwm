@@ -201,6 +201,45 @@ namespace glfwm {
         void getFrameSize(int &left, int &top, int &right, int &bottom) const;
         
         /**
+         *  @brief  The getInputMode method returns the current value of an input mode for this Window.
+         *  @param inputMode The input mode to query for its value.
+         *  @return The value of the specified input mode.
+         *  @note   This may only be called from the main thread.
+         */
+        InputModeValueType getInputMode(const InputModeType inputMode) const;
+        
+        /**
+         *  @brief  The setInputMode method sets a new value for the specified input mode.
+         *  @param inputMode      The input mode whose value must be changed.
+         *  @param inputModeValue The value for the specified input mode.
+         *  @note   This may only be called from the main thread.
+         */
+        void setInputMode(const InputModeType inputMode, const InputModeValueType inputModeValue);
+        
+        /**
+         *  @brief  The getKey method returns the last state reported for the specified key.
+         *  @param key  The key to query for its last state.
+         *  @return The last state of the specified key.
+         *  @note   This may only be called from the main thread.
+         */
+        ActionType getKey(const KeyType key) const;
+        
+        /**
+         *  @brief  The getMouseButton method returns the last state reported for the specified mouse button.
+         *  @param mouseButton  The mouse button to query for its last state.
+         *  @return The last state of the specified mouse button.
+         *  @note   This may only be called from the main thread.
+         */
+        ActionType getMouseButton(const MouseButtonType mouseButton) const;
+        
+        /**
+         *  @brief  The setCursor method sets the cursor shape to be used when the cursor is over this Window area.
+         *  @param cursor The cursor to set. If a null pointer is passed, the default arrow cursor is set.
+         *  @note   This may only be called from the main thread.
+         */
+        void setCursor(GLFWcursor *cursor);
+        
+        /**
          *    @brief  The getCursorPosition method returns the cursor position, in screen coordinates, relative to
          *            the upper left corner of this window.
          *    @param x The x-coordinate of the cursor.
@@ -266,6 +305,20 @@ namespace glfwm {
          *  @param pointer The user pointer to set.
          */
         void setUserPointer(void *pointer);
+        
+        /**
+         *  @brief  The getClipboardString method returns the system clipboard text, if any.
+         *  @param text The output system clipboard text.
+         *  @note   This may only be called from the main thread.
+         */
+        void getClipboardString(std::string &text) const;
+        
+        /**
+         *  @brief  The setClipboardString method sets the system clipboard text.
+         *  @param text The system clipboard text to set.
+         *  @note   This may only be called from the main thread.
+         */
+        void setClipboardString(const std::string &text);
         
         /**
          *  @brief  The swapBuffers method swaps the front and the back buffer.
