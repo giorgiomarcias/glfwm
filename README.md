@@ -23,21 +23,21 @@ It depends on [**GLFW**](http://www.glfw.org), which must be installed on the sy
 To compile this software, import it in another software through cmake.
 Supposing to have your software root cmake file at
 
-`<path-to-your-software>/CMakeLists.txt`
+    <path-to-your-software>/CMakeLists.txt
 
 add GLFWM as subdirectory to it:
 
-# uncomment the following line if you do NOT want multi-threading support
-#SET(WITH_MULTITHREADING OFF CACHE BOOL "Build GLFWM with multithreading facilities (i.e. thread-safe) or not.")
-ADD_SUBDIRECTORY(<path-to-glfwm> ${CMAKE_CURRENT_BINARY_DIR}/glfwm)
-...
-TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME} PUBLIC ${GLFWM_INCLUDE_DIRS})
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${GLFWM_LIBRARIES})
+    # uncomment the following line if you do NOT want multi-threading support
+    #SET(WITH_MULTITHREADING OFF CACHE BOOL "Build GLFWM with multithreading facilities (i.e. thread-safe) or not.")
+    ADD_SUBDIRECTORY(<path-to-glfwm> ${CMAKE_CURRENT_BINARY_DIR}/glfwm)
+    ...
+    TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME} PUBLIC ${GLFWM_INCLUDE_DIRS})
+    TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${GLFWM_LIBRARIES})
 
 Then it can be compiled with the commands:
 
-> cmake <path-to-your-software>
-> make
+    > cmake <path-to-your-software>
+    > make
 
 It has been tested on Mac OS X 10.9 - 10.10 - 10.11
 
