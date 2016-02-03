@@ -1,4 +1,4 @@
-// Copyright (c) 2015 Giorgio Marcias
+// Copyright (c) 2015-2016 Giorgio Marcias
 //
 // This file is part of GLFWM, a C++11 wrapper of GLFW with
 // multi-threading management (GLFW Manager).
@@ -14,13 +14,13 @@
 #include "update_map.hpp"
 
 namespace glfwm {
-    
+
     std::unordered_map<WindowGroupID, std::unordered_set<WindowID>>     UpdateMap::groups_windows;
-    
+
 #ifndef NO_MULTITHREADING
     std::mutex                                                          UpdateMap::globalMutex;
 #endif
-    
+
     /**
      *  @brief  The notify static method is used to wake up the WindowManager and send a signal to a Window or WindowGroup target to update itself.
      *  @param gID The ID of the WindowGroup to update. It is ignored unless wID is WholeGroupWindowIDs or AllWindowIDs, otherwise it must be a valid ID.
@@ -31,7 +31,7 @@ namespace glfwm {
         setToUpdate(gID, wID);
         glfwPostEmptyEvent();
     }
-    
+
     /**
      *  @brief  The setToUpdate static method is used to collect a Window or WindowGroup target to update itself.
      *  @param gID The ID of the WindowGroup to update. It is ignored unless wID is WholeGroupWindowIDs or AllWindowIDs, otherwise it must be a valid ID.
@@ -45,7 +45,7 @@ namespace glfwm {
 #endif
         groups_windows[gID].insert(wID);
     }
-    
+
     /**
      *  @brief  The popGroup static method is used by WindowManager to get the next group to wake up.
      *  @param  gID The output WindowGrupID of the group to update.
@@ -77,7 +77,7 @@ namespace glfwm {
             groups_windows.erase(groups_windows.begin());
         }
     }
-    
+
     /**
      *  @brief  The empty static methos says if the queue is currently empty.
      *  @return true if empty, false otherwise.
@@ -90,5 +90,5 @@ namespace glfwm {
 #endif
         return groups_windows.empty();
     }
-    
+
 }

@@ -1,4 +1,4 @@
-// Copyright (c) 2015 Giorgio Marcias
+// Copyright (c) 2015-2016 Giorgio Marcias
 //
 // This file is part of GLFWM, a C++11 wrapper of GLFW with
 // multi-threading management (GLFW Manager).
@@ -14,7 +14,7 @@
 #include "enums.hpp"
 
 namespace glfwm {
-    
+
     // overloading AND assignment for modifier key types
     ModifierKeyBaseType & operator &= (ModifierKeyBaseType &mkbt, const ModifierKeyType &mkt) {
         mkbt &= static_cast<ModifierKeyBaseType>(mkt);
@@ -30,9 +30,9 @@ namespace glfwm {
         mkbt ^= static_cast<ModifierKeyBaseType>(mkt);
         return mkbt;
     }
-    
-    
-    
+
+
+
     // overloading AND assignment for event types
     EventBaseType & operator &= (EventBaseType &ebt, const EventType &et) {
         ebt &= static_cast<EventBaseType>(et);
@@ -48,5 +48,5 @@ namespace glfwm {
         ebt ^= static_cast<EventBaseType>(et);
         return ebt;
     }
-    
+
 }

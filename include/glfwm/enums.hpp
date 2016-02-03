@@ -1,4 +1,4 @@
-// Copyright (c) 2015 Giorgio Marcias
+// Copyright (c) 2015-2016 Giorgio Marcias
 //
 // This file is part of GLFWM, a C++11 wrapper of GLFW with
 // multi-threading management (GLFW Manager).
@@ -17,23 +17,23 @@
 #include "utility.hpp"
 
 namespace glfwm {
-    
+
     using       WindowID                        =   size_t;
     constexpr   WindowID LastWindowID           =   std::numeric_limits<WindowID>::max() - 2;
     constexpr   WindowID WholeGroupWindowIDs    =   std::numeric_limits<WindowID>::max() - 1;
     constexpr   WindowID AllWindowIDs           =   std::numeric_limits<WindowID>::max();
-    
+
     using       WindowGroupID                   =   size_t;
     constexpr   WindowGroupID LastWindowGroupID =   std::numeric_limits<WindowGroupID>::max() - 3;
     constexpr   WindowGroupID NoWindowGroupID   =   std::numeric_limits<WindowGroupID>::max() - 2;
     constexpr   WindowGroupID AnyWindowGroupID  =   std::numeric_limits<WindowGroupID>::max() - 1;
     constexpr   WindowGroupID AllWindowGroupIDs =   std::numeric_limits<WindowGroupID>::max();
-    
+
     /**
      *  @brief  InputModeBaseType is the base type used to identify the GLFW input modes.
      */
     using   InputModeBaseType                   =   int;
-    
+
     /**
      *  @brief  The InputModeType represents the GLFW input modes.
      */
@@ -42,12 +42,12 @@ namespace glfwm {
         STICKY_KEYS                             =   GLFW_STICKY_KEYS,
         STICKY_MOUSE_BUTTONS                    =   GLFW_STICKY_MOUSE_BUTTONS
     };
-    
+
     /**
      *  @brief  InputModeValueBaseType is the base type used to identify the values for GLFW input modes.
      */
     using   InputModeValueBaseType              =   int;
-    
+
     /**
      *  @brief  The InputModeValueType represents the GLFW input modes' values.
      */
@@ -58,12 +58,12 @@ namespace glfwm {
         STICKY_TRUE                             =   GL_TRUE,
         STICKY_FALSE                            =   GL_FALSE
     };
-    
+
     /**
      *  @brief  ModifierKeyBaseType is the base type used to store a bit set for modifier key types.
      */
     using   ModifierKeyBaseType                 =   int;
-    
+
     /**
      *  @brief  The ModifierKeyType enum represents the modifier key types.
      */
@@ -74,7 +74,7 @@ namespace glfwm {
         MODIFIER_ALT                            =   GLFW_MOD_ALT,
         MODIFIER_SUPER                          =   GLFW_MOD_SUPER
     };
-    
+
     // overloading NOT for modifier key types
     inline constexpr ModifierKeyBaseType operator ~ (const ModifierKeyType &mkt) {
         return ~ static_cast<ModifierKeyBaseType>(mkt);
@@ -115,14 +115,14 @@ namespace glfwm {
     ModifierKeyBaseType & operator |= (ModifierKeyBaseType &mkbt, const ModifierKeyType &mkt);
     // overloading XOR assignment for modifier key types
     ModifierKeyBaseType & operator ^= (ModifierKeyBaseType &mkbt, const ModifierKeyType &mkt);
-    
-    
-    
+
+
+
     /**
      *  @brief  The MouseButtonBaseType is the base type used to store a bit set for mouse button types.
      */
     using   MouseButtonBaseType                 =   int;
-    
+
     /**
      *  @brief  The MouseButtonType enum represents the mouse button types.
      */
@@ -141,14 +141,14 @@ namespace glfwm {
         MOUSE_BUTTON_RIGHT                      =   GLFW_MOUSE_BUTTON_RIGHT,
         MOUSE_BUTTON_MIDDLE                     =   GLFW_MOUSE_BUTTON_MIDDLE
     };
-    
-    
-    
+
+
+
     /**
      *  @brief  The KeyBaseType is the base type used to store a bit set for key types.
      */
     using   KeyBaseType                         =   int;
-    
+
     /**
      *  @brief  The KeyType enum represents the key types.
      */
@@ -276,9 +276,9 @@ namespace glfwm {
         KEY_MENU                                =   GLFW_KEY_MENU,
         KEY_LAST                                =   GLFW_KEY_LAST
     };
-    
-    
-    
+
+
+
     /**
      *  @brief  The ActionType enum represents the action types of an input event.
      */
@@ -288,14 +288,14 @@ namespace glfwm {
         RELEASE                                 =   GLFW_RELEASE,
         REPEAT                                  =   GLFW_REPEAT
     };
-    
-    
-    
+
+
+
     /**
      *  @brief  EventBaseType is the base type used to store a bit set for event types.
      */
     using   EventBaseType                       =   unsigned int;
-    
+
     /**
      *  @brief  The EventType enum represents the event types.
      */
@@ -319,7 +319,7 @@ namespace glfwm {
         MOUSE_BUTTON                            =   0x2000,
         SCROLL                                  =   0x4000
     };
-    
+
     // overloading NOT for event types
     inline constexpr EventBaseType operator ~ (const EventType &et) {
         return ~ static_cast<EventBaseType>(et);
@@ -360,7 +360,7 @@ namespace glfwm {
     EventBaseType & operator |= (EventBaseType &ebt, const EventType &et);
     // overloading XOR assignment for event types
     EventBaseType & operator ^= (EventBaseType &ebt, const EventType &et);
-    
+
     constexpr EventBaseType allEventTypes   = EventType::WINDOW_POSITION
                                             | EventType::WINDOW_SIZE
                                             | EventType::WINDOW_CLOSE
@@ -376,7 +376,7 @@ namespace glfwm {
                                             | EventType::KEY
                                             | EventType::MOUSE_BUTTON
                                             | EventType::SCROLL;
-    
+
 }
 
 #endif

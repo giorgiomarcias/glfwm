@@ -1,4 +1,4 @@
-// Copyright (c) 2015 Giorgio Marcias
+// Copyright (c) 2015-2016 Giorgio Marcias
 //
 // This file is part of GLFWM, a C++11 wrapper of GLFW with
 // multi-threading management (GLFW Manager).
@@ -14,13 +14,13 @@
 #include "glfwm.hpp"
 
 namespace glfwm {
-    
+
 #ifndef NO_MULTITHREADING
     std::atomic<bool>    WindowManager::poll(false);
 #else
     bool                 WindowManager::poll = false;
 #endif
-    
+
     /**
      *    @brief   The init static method initializes GLFW.
      *    @return true if correctly initialized, false otherwise.
@@ -28,7 +28,7 @@ namespace glfwm {
     bool WindowManager::init() {
         return glfwInit();
     }
-    
+
     /**
      *    @brief  The setSwapInterval static method changes the number of screen updates to wait before swapping the framebuffers (vsync).
      *    @param intervals How many intervals to wait.
@@ -37,7 +37,7 @@ namespace glfwm {
     {
         glfwSwapInterval(intervals);
     }
-    
+
     /**
      *  @brief  The resetDefaultHints static method resets all window hints to their default values.
      *  @note   This may only be called from the main thread.
@@ -46,7 +46,7 @@ namespace glfwm {
     {
         glfwDefaultWindowHints();
     }
-    
+
     /**
      *  @brief  The setHint static method sets a target hint to a given value.
      *  @param target The target hint.
@@ -56,7 +56,7 @@ namespace glfwm {
     {
         glfwWindowHint(target, value);
     }
-    
+
     /**
      *    @brief  The setPoll static method changes the current way of managing the event queue: process any event in the queue, or wait and then process them.
      *    @param doPoll true for processing without waiting, false for waiting and then processing.
@@ -67,7 +67,7 @@ namespace glfwm {
         if (doPoll)
             UpdateMap::notify();
     }
-    
+
     /**
      *    @brief  The createWindow static method is a convenient way of constructing a new Window and directly registering the callbacks for the events of type eventTypes.
      *    @param width      The window width.
@@ -85,7 +85,7 @@ namespace glfwm {
         registerWindowCallbacks(w, eventTypes);
         return w;
     }
-    
+
     /**
      *    @brief  The createWindow static method is a convenient way of constructing a new Window and directly registering the callbacks for the events of type eventTypes.
      *    @param width      The window width.
@@ -101,7 +101,7 @@ namespace glfwm {
     {
         return createWindow(width, height, title, static_cast<EventBaseType>(eventType));
     }
-    
+
     /**
      *    @brief  The registerWindowCallbacks static method sets callbacks for window to handle events of type eventTypes.
      *    @param window     The Window whose events must be handled with the callbacks to register.
@@ -140,7 +140,7 @@ namespace glfwm {
         if (eventTypes & EventType::SCROLL)
             glfwSetScrollCallback(window->glfwWindow, inputScrollCallback);
     }
-    
+
     /**
      *    @brief  The registerWindowCallbacks static method sets callbacks for window to handle events of type eventType.
      *    @param window     The Window whose events must be handled with the callbacks to register.
@@ -150,7 +150,7 @@ namespace glfwm {
     {
         registerWindowCallbacks(window, static_cast<EventBaseType>(eventType));
     }
-    
+
     /**
      *    @brief  The getCurrentContext static method returns the Window whose context is the current one.
      */
@@ -158,7 +158,7 @@ namespace glfwm {
     {
         return Window::getWindow(Window::getWindowID(glfwGetCurrentContext()));
     }
-    
+
     /**
      *    @brief  The mainLoop static method executes the loop of event handling and window rendering.
      *    @note   The way of managing the event queue can be changed even while this method is running.
@@ -170,10 +170,10 @@ namespace glfwm {
         WindowPointer w;
         std::unordered_set<WindowGroupID> gIDs;
         std::unordered_set<WindowID> wIDs;
-        
+
         // ensure first rendering
         UpdateMap::setToUpdate(AllWindowGroupIDs, AllWindowIDs);
-        
+
         // do loop
         do {
             // update groups and windows
@@ -229,7 +229,7 @@ namespace glfwm {
                     }
                 }
             }
-            
+
             // manage events
             if (poll) {
                 glfwPollEvents();
@@ -237,7 +237,7 @@ namespace glfwm {
             } else {
                 glfwWaitEvents();
             }
-            
+
             // check for windows to close (and detach from groups)
             Window::windowsToClose(wIDs);
             for (auto id : wIDs) {
@@ -246,10 +246,10 @@ namespace glfwm {
                     g->detachWindow(id);
                 Window::deleteWindow(id);
             }
-            
+
         } while (Window::isAnyWindowOpen());
     }
-    
+
     /**
      *    @brief  The terminate static method deletes all the remained Windows and WindowGroups and then terminate GLFW.
      *    @note   Call this method after mainLoop.
@@ -259,11 +259,11 @@ namespace glfwm {
         Window::deleteAllWindows();
         glfwTerminate();
     }
-    
-    
-    
+
+
+
     // callbacks
-    
+
     void WindowManager::windowPositionCallback(GLFWwindow *glfwWindow, int x, int y) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -293,7 +293,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     void WindowManager::windowSizeCallback(GLFWwindow *glfwWindow, int width, int height) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -323,7 +323,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     void WindowManager::windowCloseCallback(GLFWwindow *glfwWindow) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -371,7 +371,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     void WindowManager::windowFocusCallback(GLFWwindow *glfwWindow, int hasFocus) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -401,7 +401,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     void WindowManager::windowIconifyCallback(GLFWwindow *glfwWindow, int toIconify) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -431,7 +431,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     void WindowManager::windowFramebufferSizeCallback(GLFWwindow *glfwWindow, int width, int height) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -461,7 +461,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     void WindowManager::inputMouseButtonCallback(GLFWwindow *glfwWindow, int button, int action, int mods) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -491,7 +491,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     void WindowManager::inputCursorPostionCallback(GLFWwindow *glfwWindow, double x, double y) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -521,7 +521,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     void WindowManager::inputCursorEnterCallback(GLFWwindow *glfwWindow, int enter) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -551,7 +551,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     void WindowManager::inputScrollCallback(GLFWwindow *glfwWindow, double xOffset, double yOffset) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -581,7 +581,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     void WindowManager::inputKeyCallback(GLFWwindow *glfwWindow, int key, int scancode, int action, int mods) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -611,7 +611,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     void WindowManager::inputCharCallback(GLFWwindow *glfwWindow, unsigned int codepoint) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -641,7 +641,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     void WindowManager::inputCharModCallback(GLFWwindow *glfwWindow, unsigned int codepoint, int mods) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -671,7 +671,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     void WindowManager::inputDropCallback(GLFWwindow *glfwWindow, int count, const char **paths) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
@@ -706,5 +706,5 @@ namespace glfwm {
 #endif
         }
     }
-    
+
 }

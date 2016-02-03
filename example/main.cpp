@@ -1,4 +1,4 @@
-// Copyright (c) 2015 Giorgio Marcias
+// Copyright (c) 2015-2016 Giorgio Marcias
 //
 // This file is part of GLFWM, a C++11 wrapper of GLFW with
 // multi-threading management (GLFW Manager).
@@ -74,7 +74,7 @@ public:
     {
         return static_cast<glfwm::EventBaseType>(glfwm::EventType::MOUSE_BUTTON);
     }
-    
+
     // Then this method takes an action when the events that can be handled occur.
     // Specifically, when you left-click on a window, a new window is created, whilst
     // when you right-click on a window, it is closed without affecting those created
@@ -89,17 +89,17 @@ public:
     bool handle(const glfwm::EventPointer &e)
     {
         if (e->getEventType() == glfwm::EventType::MOUSE_BUTTON) {
-            
+
             std::shared_ptr<glfwm::EventMouseButton> mb = std::dynamic_pointer_cast<glfwm::EventMouseButton>(e);
-            
+
             if (mb->getAction() != glfwm::ActionType::RELEASE)
                 return false;
-            
+
             glfwm::WindowPointer win = glfwm::Window::getWindow(e->getWindowID());
             int w, h, x, y;
             win->getSize(w, h);
             win->getPosition(x, y);
-            
+
             if (mb->getMouseButton() == glfwm::MouseButtonType::MOUSE_BUTTON_LEFT) {
                 glfwm::WindowPointer newWin = glfwm::WindowManager::createWindow(w * 0.9, h * 0.9, std::string(), getHandledEventTypes());
                 newWin->setTitle(std::string("Window ") + std::to_string(newWin->getID()) + std::string(". Built from ") + std::to_string(e->getWindowID()));
@@ -116,7 +116,7 @@ public:
             }
             return false;
         }
-        
+
         return false;
     }
 };
@@ -127,33 +127,33 @@ int main(int argc, char *argv[])
 {
     // First thing to do: initialization!
     glfwm::WindowManager::init();
-    
+
     // You can set any GLFW hint with this method:
     glfwm::WindowManager::setHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
     glfwm::WindowManager::setHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    
+
     // Remember to instantiate the handlers and the drawables to bind to the windows.
     // A handler can be bound to any number of different windows, and a window can have
     // any number of handlers bound to it.
     // The same holds for Drawables.
     myHandler = std::make_shared<MyHandler>();
     myDrawable = std::make_shared<MyDrawable>();
-    
+
     // Create windows with the glfwm::WindowManager::createWindow() method.
     // Alternatively, call glfwm::Window::newWindow() and then glfwm::WindowManager::registerCallbacks().
     // At this time, remember to register the callbacks for the event you want to handle.
     glfwm::WindowPointer mainWin = glfwm::WindowManager::createWindow(800, 600, std::string(), myHandler->getHandledEventTypes());
-    
+
     // You can set the title of the window, and other stuff: see glfwm::Window.
     mainWin->setTitle(std::string("Main Window ") + std::to_string(mainWin->getID()));
-    
+
     // Remember to bind the handlers and the drawables. The second parameter is the rank that determines
     // the position in the list bound to the Window. The list is sorted accordingly:
     // a handler with rank 3 comes before one with 4 and after one with -100; two handlers with the same
     // rank appear one after the other depending on which is bound after.
     mainWin->bindEventHandler(myHandler, 0);
     mainWin->bindDrawable(myDrawable, 0);
-    
+
     // Now, if you want to draw the windows' content in parallel, the best way to do it is
     // to create a group, attach windows to it, and make it run in a separate thread by
     // calling glfwm::WindowGroup::runLoopConcurrently(). Of course you don't have to.
@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
     glfwm::WindowGroupPointer grp = glfwm::WindowGroup::newGroup();
     grp->attachWindow(mainWin->getID());
     grp->runLoopConcurrently();
-    
+
     // When at least one Window has been created, you can start the main loop.
     // It consists of alternating event handling and content drawing.
     // There are two possibilities:
@@ -176,9 +176,9 @@ int main(int argc, char *argv[])
     // are closed, the mainLoop() method ends.
     // Note that a window is closed and others remain open, that window is destroyed.
     glfwm::WindowManager::mainLoop();
-    
+
     // Finally, deletes all the resources: any group is destroyed and GLFW is terminated.
     glfwm::WindowManager::terminate();
-    
+
     return 0;
 }

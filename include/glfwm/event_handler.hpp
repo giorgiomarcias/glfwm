@@ -1,4 +1,4 @@
-// Copyright (c) 2015 Giorgio Marcias
+// Copyright (c) 2015-2016 Giorgio Marcias
 //
 // This file is part of GLFWM, a C++11 wrapper of GLFW with
 // multi-threading management (GLFW Manager).
@@ -27,7 +27,7 @@ namespace glfwm {
          *            Any Window will use this to skip handlers that can not handle a given event type.
          */
         virtual EventBaseType getHandledEventTypes() const = 0;
-        
+
         /**
          *    @brief  The handle method receives an event and react to it.
          *    @param e The event received.
@@ -35,7 +35,7 @@ namespace glfwm {
          */
         virtual bool handle(const EventPointer &e) = 0;
     };
-    
+
     /**
      *    @brief  A smart pointer to a EventHandler object. To bind A EventHandler to a Window, a smart pointer must be used.
      */

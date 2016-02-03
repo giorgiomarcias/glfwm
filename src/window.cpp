@@ -1,4 +1,4 @@
-// Copyright (c) 2015 Giorgio Marcias
+// Copyright (c) 2015-2016 Giorgio Marcias
 //
 // This file is part of GLFWM, a C++11 wrapper of GLFW with
 // multi-threading management (GLFW Manager).
@@ -14,7 +14,7 @@
 #include "window.hpp"
 
 namespace glfwm {
-    
+
     /**
      *  @brief  Contructor. This can be called only in the main thread.
      *  @param  id The ID of this new window.
@@ -39,9 +39,9 @@ namespace glfwm {
         std::lock_guard<std::recursive_mutex> lock(globalMutex);
 #endif
         windowsMap.insert(std::make_pair(glfwWindow, id));
-        
+
     }
-    
+
     /**
      *  @brief  Destructor.
      */
@@ -49,7 +49,7 @@ namespace glfwm {
     {
         destroy();
     }
-    
+
     /**
      *  @brief  The destroy method releases all GLFW data owned by this Window. This may only be called from the main thread.
      */
@@ -72,7 +72,7 @@ namespace glfwm {
 #endif
         }
     }
-    
+
     /**
      *  @brief  returns this Window's assigned ID.
      *  @return this Window's assigned ID.
@@ -81,7 +81,7 @@ namespace glfwm {
     {
         return windowID;
     }
-    
+
     /**
      *  @brief  The bindEventHandler method binds an EventHandler by adding it to the list of handlers in a position determined by the rank r.
      *  @param eh The EventHandler to bind.
@@ -94,12 +94,12 @@ namespace glfwm {
         // acquire ownership
         std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
 #endif
-        
+
         EventHandlersIterator position;
-        
+
         // first, look up the handler among those already bound
         EventHandlerMapIterator ehIt = eventHandlerMap.find(eh);
-        
+
         // if bound, unbind it
         if (ehIt != eventHandlerMap.end()) {
             position = ehIt->second;
@@ -109,7 +109,7 @@ namespace glfwm {
             EventHandlerMapInserResult res = eventHandlerMap.insert(std::make_pair(eh, eventHandlers.end()));
             ehIt = res.first;
         }
-        
+
         // then (re)bind it
         EventHandlerRank ehr;
         ehr.object = eh;
@@ -117,7 +117,7 @@ namespace glfwm {
         position = std::lower_bound(eventHandlers.begin(), eventHandlers.end(), ehr);
         ehIt->second = eventHandlers.insert(position, ehr);
     }
-    
+
     /**
      *  @brief  The unbindEventHandler methods removes the EventHandler eh from the list of handlers, if present.
      *  @param eh The EventHandler to unbind.
@@ -128,10 +128,10 @@ namespace glfwm {
         // acquire ownership
         std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
 #endif
-        
+
         // first, look up the handler among those already bound
         EventHandlerMapIterator ehIt = eventHandlerMap.find(eh);
-        
+
         // if bound, unbind it
         if (ehIt != eventHandlerMap.end()) {
             // remove it from the list
@@ -140,7 +140,7 @@ namespace glfwm {
             eventHandlerMap.erase(ehIt);
         }
     }
-    
+
     /**
      *  @brief  The handleEvent method is called when an event occurs and it just calls the bound handlers in the order given by their rank until
      *          one of them positively handles it.
@@ -152,17 +152,17 @@ namespace glfwm {
         // acquire ownership
         std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
 #endif
-        
+
         // check if this is the right recipient
         if (e->getWindowID() != windowID)
             return;
-        
+
         // search the first handler that handles event e
         for (auto &h : eventHandlers)
             if (h.object->getHandledEventTypes() & e->getEventType() && h.object->handle(e))
                 return;
     }
-    
+
     /**
      *  @brief  The bindDrawable method binds a Drawable by adding it to the list of drawable objects in a position determined by the rank r.
      *  @param d The Drawable to bind.
@@ -175,12 +175,12 @@ namespace glfwm {
         // acquire ownership
         std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
 #endif
-        
+
         DrawablesIterator position;
-        
+
         // first, look up the drawable among those already bound
         DrawableMapIterator dIt = drawableMap.find(d);
-        
+
         // if bound, unbind it
         if (dIt != drawableMap.end()) {
             position = dIt->second;
@@ -190,7 +190,7 @@ namespace glfwm {
             DrawableMapInserResult res = drawableMap.insert(std::make_pair(d, drawables.end()));
             dIt = res.first;
         }
-        
+
         // then (re)bind it
         DrawableRank dr;
         dr.object = d;
@@ -198,7 +198,7 @@ namespace glfwm {
         position = std::lower_bound(drawables.begin(), drawables.end(), dr);
         dIt->second = drawables.insert(position, dr);
     }
-    
+
     /**
      *  @brief  The unbindDrawable methods removes the Drawable d from the list of drawable objects, if present.
      *  @param d The Drawable to unbind.
@@ -209,10 +209,10 @@ namespace glfwm {
         // acquire ownership
         std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
 #endif
-        
+
         // first, look up the drawable among those already bound
         DrawableMapIterator dIt = drawableMap.find(d);
-        
+
         // if bound, unbind it
         if (dIt != drawableMap.end()) {
             // remove it from the list
@@ -221,7 +221,7 @@ namespace glfwm {
             drawableMap.erase(dIt);
         }
     }
-    
+
     /**
      *  @brief  The draw method is called when this window is rendered and it just calls the bound drawables in the order given by their rank.
      */
@@ -235,7 +235,7 @@ namespace glfwm {
         for (auto &d : drawables)
             d.object->draw(windowID);
     }
-    
+
     /**
      *  @brief  The shouldClose method is a wrapper of glfwWindowShouldClose.
      *  @return true if this window should close, false otherwise.
@@ -250,7 +250,7 @@ namespace glfwm {
             return glfwWindowShouldClose(glfwWindow);
         return true;
     }
-    
+
     /**
      *  @brief  The setShouldClose method is a wrapper of glfwSetWindowShouldClose.
      *  @param c true for yes, false for no.
@@ -263,7 +263,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwSetWindowShouldClose(glfwWindow, c ? GL_TRUE : GL_FALSE);
     }
-    
+
     /**
      *  @brief  The setTitle method changes the current title.
      *  @param title The new window title.
@@ -278,7 +278,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwSetWindowTitle(glfwWindow, title.c_str());
     }
-    
+
     /**
      *  @brief  The getPosition method returns the x and y screen coordinate position.
      *  @param x The x coordinate.
@@ -294,7 +294,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwGetWindowPos(glfwWindow, &x, &y);
     }
-    
+
     /**
      *  @brief  The getPosition method sets the x and y screen coordinate position.
      *  @param x The x coordinate.
@@ -310,7 +310,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwSetWindowPos(glfwWindow, x, y);
     }
-    
+
     /**
      *  @brief  The getSize method returns the width and height of this window area.
      *  @param width The width of this window area.
@@ -326,7 +326,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwGetWindowSize(glfwWindow, &width, &height);
     }
-    
+
     /**
      *  @brief  The setSize method sets the width and height of this window area.
      *  @param width The width of this window area.
@@ -342,7 +342,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwSetWindowSize(glfwWindow, width, height);
     }
-    
+
     /**
      *  @brief  The getFramebufferSize method returns the width and height of this window framebuffer.
      *  @param width The width of this window framebuffer.
@@ -358,7 +358,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwGetFramebufferSize(glfwWindow, &width, &height);
     }
-    
+
     /**
      *  @brief  The getFrameSize method returns size of each of the frame edges of this window.
      *  @param left The left edge size.
@@ -376,7 +376,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwGetWindowFrameSize(glfwWindow, &left, &top, &right, &bottom);
     }
-    
+
     /**
      *  @brief  The getInputMode method returns the current value of an input mode for this Window.
      *  @param inputMode The input mode to query for its value.
@@ -396,7 +396,7 @@ namespace glfwm {
         else
             return InputModeValueType::STICKY_FALSE;
     }
-    
+
     /**
      *  @brief  The setInputMode method sets a new value for the specified input mode.
      *  @param inputMode      The input mode whose value must be changed.
@@ -412,7 +412,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwSetInputMode(glfwWindow, static_cast<InputModeBaseType>(inputMode), static_cast<InputModeValueBaseType>(inputModeValue));
     }
-    
+
     /**
      *  @brief  The getKey method returns the last state reported for the specified key.
      *  @param key The key to query for its last state.
@@ -430,7 +430,7 @@ namespace glfwm {
         else
             return ActionType::NONE;
     }
-    
+
     /**
      *  @brief  The getMouseButton method returns the last state reported for the specified mouse button.
      *  @param mouseButton  The mouse button to query for its last state.
@@ -448,7 +448,7 @@ namespace glfwm {
         else
             return ActionType::NONE;
     }
-    
+
     /**
      *  @brief  The setCursor method sets the cursor shape to be used when the cursor is over this Window area.
      *  @param cursor The cursor to set. If a null pointer is passed, the default arrow cursor is set.
@@ -463,7 +463,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwSetCursor(glfwWindow, cursor);
     }
-    
+
     /**
      *    @brief  The getCursorPosition method returns the cursor position, in screen coordinates, relative to
      *            the upper left corner of this window.
@@ -479,7 +479,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwGetCursorPos(glfwWindow, &x, &y);
     }
-    
+
     /**
      *    @brief  The setCursorPosition method changes the cursor position, in screen coordinates, relative to
      *            the upper left corner of this window.
@@ -495,7 +495,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwSetCursorPos(glfwWindow, x, y);
     }
-    
+
     /**
      *  @brief  The iconify method minimizes this window.
      *  @note   This may only be called from the main thread.
@@ -509,7 +509,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwIconifyWindow(glfwWindow);
     }
-    
+
     /**
      *  @brief  The restore method restores this window, if minimized.
      *  @note   This may only be called from the main thread.
@@ -523,7 +523,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwRestoreWindow(glfwWindow);
     }
-    
+
     /**
      *  @brief  The hide method hides this window, if shown and not fullscreen.
      *  @note   This may only be called from the main thread.
@@ -537,7 +537,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwHideWindow(glfwWindow);
     }
-    
+
     /**
      *  @brief  The show method shows this window, if hidden.
      *  @note   This may only be called from the main thread.
@@ -551,7 +551,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwShowWindow(glfwWindow);
     }
-    
+
     /**
      *  @brief  The getMonitor method returns the GLFWMonitor this window uses in fullscreen.
      *  @return This window monitor.
@@ -566,7 +566,7 @@ namespace glfwm {
             return glfwGetWindowMonitor(glfwWindow);
         return nullptr;
     }
-    
+
     /**
      *  @brief  The getAttribute method returns this window attributes. See GLFW.
      *  @param  attribute The attribute to read.
@@ -583,7 +583,7 @@ namespace glfwm {
             return glfwGetWindowAttrib(glfwWindow, attribute);
         return 0;
     }
-    
+
     /**
      *  @brief  The getUserPointer method returns the user pointer for this window. See GLFW.
      *  @return The user pointer.
@@ -598,7 +598,7 @@ namespace glfwm {
             return glfwGetWindowUserPointer(glfwWindow);
         return nullptr;
     }
-    
+
     /**
      *  @brief  The setUserPointer method sets the user pointer for this window. See GLFW.
      *  @param pointer The user pointer to set.
@@ -612,7 +612,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwSetWindowUserPointer(glfwWindow, pointer);
     }
-    
+
     /**
      *  @brief  The getClipboardString method returns the system clipboard text, if any.
      *  @param text The output system clipboard text.
@@ -631,7 +631,7 @@ namespace glfwm {
                 text = t;
         }
     }
-    
+
     /**
      *  @brief  The setClipboardString method sets the system clipboard text.
      *  @param text The system clipboard text to set.
@@ -646,7 +646,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwSetClipboardString(glfwWindow, text.c_str());
     }
-    
+
     /**
      *  @brief  The swapBuffers method swaps the front and the back buffer.
      */
@@ -659,7 +659,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwSwapBuffers(glfwWindow);
     }
-    
+
     /**
      *  @brief  The makeContextCurrent method makes the context associated to this window current.
      */
@@ -672,7 +672,7 @@ namespace glfwm {
         if (glfwWindow)
             glfwMakeContextCurrent(glfwWindow);
     }
-    
+
     /**
      *  @brief  The doneCurrentContext method releases the resources held by makeContextCurrent.
      *  @note   A call to this may only follow a call to makeContextCurrent, without nesting, otherwise the behaviour is undefined.
@@ -684,25 +684,25 @@ namespace glfwm {
         mutexes[sharedMutexID].mutex.unlock();
 #endif
     }
-    
-    
-    
+
+
+
 #ifndef NO_MULTITHREADING
     /**
      *  @brief  Mutex used to guarantee correct concurrent management of static activities.
      */
     std::recursive_mutex                        Window::globalMutex;
-    
+
     /**
      *  @brief  The container of mutexes.
      */
     std::deque<Window::MutexData>               Window::mutexes;
-    
+
     /**
      *  @brief  The container for reusing freed MutexIDs. It is kept sorted.
      */
     std::deque<Window::MutexID>                 Window::freedMutexes;
-    
+
     /**
      *  @brief  The newMutexID static method books a new or an old & freed ID for mutexes.
      *  @return The booked MutexID.
@@ -721,7 +721,7 @@ namespace glfwm {
         mutexes[id].count++;
         return id;
     }
-    
+
     /**
      *  @brief  The decreaseMutexCount static method decreases the number of users of a mutex, eventually freeing it.
      *  @param id The ID of the mutex.
@@ -740,22 +740,22 @@ namespace glfwm {
         }
     }
 #endif
-    
+
     /**
      *  @brief  The map between GLFWWindow pointers and WindowIDs.
      */
     Window::WindowMap                           Window::windowsMap;
-    
+
     /**
      *  @brief  The container for collecting Windows.
      */
     std::deque<WindowPointer>                   Window::windows;
-    
+
     /**
      *  @brief  The container for reusing freed WindowIDs.
      */
     std::deque<WindowID>                        Window::freedWindowIDs;
-    
+
     /**
      *  @brief  The newWindowID static method books a new or an old & freed ID for windows.
      *  @return The booked WindowID.
@@ -775,7 +775,7 @@ namespace glfwm {
             windows.resize(id + 1);
         return id;
     }
-    
+
     /**
      *  @brief  The newWindow static method allocates and creates a new Window, storing also internal pointers and information
      *          in order to easily retrieve it later.
@@ -796,7 +796,7 @@ namespace glfwm {
         windows[id] = std::make_shared<Window>(id, width, height, title, monitor, share);
         return windows[id];
     }
-    
+
     /**
      *  @brief  The getWindow static method gives the WindowPointer to a Window given its ID.
      *  @param id The WindowID of the Window to access.
@@ -812,7 +812,7 @@ namespace glfwm {
             return windows[id];
         return WindowPointer(nullptr);
     }
-    
+
     /**
      *  @brief  The getWindowID static method gives the ID of a Window associated to a GLFWWindow object.
      *  @param w The GLFWWindow object pointer.
@@ -829,7 +829,7 @@ namespace glfwm {
             return wIt->second;
         return AllWindowIDs;
     }
-    
+
     /**
      *  @brief  The getALlWindowIDs static method returns the set of all the WindowID currently in use.
      *  @param wIDs The set of WindowIDs.
@@ -845,7 +845,7 @@ namespace glfwm {
             if (w)
                 wIDs.insert(w->windowID);
     }
-    
+
     /**
      *  @brief  The isAnyWindowOpen static method says if there is any Window still open.
      *  @return true if is there any Window still open, false otherwise.
@@ -861,7 +861,7 @@ namespace glfwm {
                 return true;
         return false;
     }
-    
+
     /**
      *  @brief  The windowsToClose static method returns a set of Windows that have the close flag on.
      *  @param wtc The set of WindowIDs of the Windows to close.
@@ -877,7 +877,7 @@ namespace glfwm {
             if (w && w->shouldClose())
                 wtc.insert(w->windowID);
     }
-    
+
     /**
      *  @brief  The deleteWindow static method destroys and removes the Window at id.
      *  @param id The ID of the Window to remove.
@@ -893,7 +893,7 @@ namespace glfwm {
             windows[id].reset();
         }
     }
-    
+
     /**
      *  @brief  The deleteAllWindows static method destroys all current windows and delete everything.
      */
@@ -911,7 +911,7 @@ namespace glfwm {
         mutexes.clear();
 #endif
     }
-    
+
     /**
      *  @brief  The unmapWindow static method removes the association between a GLFWWindow object and a Window.
      *  @param w The GLFWWindow object to unmap.
@@ -924,7 +924,7 @@ namespace glfwm {
 #endif
         windowsMap.erase(w);
     }
-    
+
     /**
      *  @brief  The freeWindowID frees an ID for a later reuse.
      *  @param id The ID to free.
@@ -938,5 +938,5 @@ namespace glfwm {
         std::deque<WindowID>::iterator pos = std::lower_bound(freedWindowIDs.begin(), freedWindowIDs.end(), id);
         freedWindowIDs.insert(pos, id);
     }
-    
+
 }
