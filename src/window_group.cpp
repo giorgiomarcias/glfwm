@@ -137,7 +137,7 @@ namespace glfwm {
         std::lock_guard<std::mutex> lock(joinMutex);
         if (threadOfLoop.joinable()) {
             doLoop = true;
-            threadOfLoop = std::move(std::thread(&WindowGroup::concurrentLoop, this));
+            threadOfLoop = std::thread(&WindowGroup::concurrentLoop, this);
         }
     }
 
