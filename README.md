@@ -1,21 +1,19 @@
-GLFWM
-=====
+GLFW Manager - C++ wrapper with multi-threading
+===============================================
 
-GLFW Manager - A C++11 wrapper of GLFW with multi-threading support
--------------------------------------------------------------------
-This is meant to be used as a library.
-It depends on [**GLFW**](http://www.glfw.org), which must be installed on the system.
+A [GLFW](http://www.glfw.org) C++ wrapper with additional OOP features.
 
 ### Features
+* C++11
 * wrapping of GLFW window-related concepts
-* multiple event handling through class derivation
-* handling of the same event with multiple handlers
-* handling of different events for different windows with the same handler
-* multiple content drawing through class derivation
+* multiple event handling
+* handling of same event with multiple handlers
+* binding of same handler to multiple windows
+* multiple content drawing
 * drawing of the same content in multiple windows
 * grouping of windows
-* multi-threaded drawing through groups
-* sending update notifications to any window from others
+* multi-threaded drawing with groups
+* window-to-window update notifications
 * update notifications to whole groups
 * automatic control of the loop
 
