@@ -497,8 +497,9 @@ namespace glfwm {
     }
 
     /**
-     *    @brief The maximize method maximizes the specified window if it was previously not maximized.
-     *           If the window is already maximized, this function does nothing.
+     *  @brief  The maximize method maximizes the specified window if it was previously not maximized.
+     *          If the window is already maximized, this function does nothing.
+     *  @note   This may only be called from the main thread.
      */
     void Window::maximize()
     {
@@ -567,6 +568,24 @@ namespace glfwm {
     }
 
     /**
+     *  @brief  The focus method brings the specified window to front and sets input focus. By default,
+     *          both windowed and full screen mode windows are focused when initially created. Set the GLFW_FOCUSED to disable this behavior.
+     *  @note   The window should already be visible and not iconified. Do not use this function to steal focus
+     *          from other applications unless you are certain that is what the user wants.
+     *          Focus stealing can be extremely disruptive.
+     *          This may only be called from the main thread.
+     */
+    void Window::focus()
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (glfwWindow)
+            glfwFocusWindow(glfwWindow);
+    }
+
+    /**
      *  @brief  The getMonitor method returns the GLFWMonitor this window uses in fullscreen.
      *  @return This window monitor.
      */
@@ -582,23 +601,24 @@ namespace glfwm {
     }
 
     /**
-     *    @brief The setMonitor method sets this window at full-screen (if monitor != nullptr) or windowed (otherwise).
+     *  @brief  The setMonitor method sets this window at full-screen (if monitor != nullptr) or windowed (otherwise).
      *
-     *    When setting a monitor, this function updates the width, height and refresh rate of the desired video mode
-     *    and switches to the video mode closest to it.
-     *    The window position is ignored when setting a monitor.
-     *    When the monitor is nullptr, the position, width and height are used to place the window client area.
-     *    The refresh rate is ignored when no monitor is specified.
-     *    If you only wish to update the resolution of a full screen window or the size of a windowed mode window, see setSize.
-     *    When a window transitions from full screen to windowed mode, this function restores any previous window settings
-     *    such as whether it is decorated, floating, resizable, has size or aspect ratio limits, etc..
+     *  When setting a monitor, this function updates the width, height and refresh rate of the desired video mode
+     *  and switches to the video mode closest to it.
+     *  The window position is ignored when setting a monitor.
+     *  When the monitor is nullptr, the position, width and height are used to place the window client area.
+     *  The refresh rate is ignored when no monitor is specified.
+     *  If you only wish to update the resolution of a full screen window or the size of a windowed mode window, see setSize.
+     *  When a window transitions from full screen to windowed mode, this function restores any previous window settings
+     *  such as whether it is decorated, floating, resizable, has size or aspect ratio limits, etc..
      *
-     *    @param monitor     The desired monitor, or nullptr to set windowed mode.
-     *    @param xpos        The desired x-coordinate of the upper-left corner of the client area.
-     *    @param ypos        The desired y-coordinate of the upper-left corner of the client area.
-     *    @param width       The desired with, in screen coordinates, of the client area or video mode.
-     *    @param height      The desired height, in screen coordinates, of the client area or video mode.
-     *    @param refreshRate The desired refresh rate, in Hz, of the video mode, or GLFW_DONT_CARE.
+     *  @param monitor      The desired monitor, or nullptr to set windowed mode.
+     *  @param xpos         The desired x-coordinate of the upper-left corner of the client area.
+     *  @param ypos         The desired y-coordinate of the upper-left corner of the client area.
+     *  @param width        The desired with, in screen coordinates, of the client area or video mode.
+     *  @param height       The desired height, in screen coordinates, of the client area or video mode.
+     *  @param refreshRate  The desired refresh rate, in Hz, of the video mode, or GLFW_DONT_CARE.
+     *  @note   This may only be called from the main thread.
      */
     void Window::setMonitor(GLFWmonitor *monitor, int xpos, int ypos, int width, int height, int refreshRate)
     {
