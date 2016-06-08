@@ -516,10 +516,10 @@ namespace glfwm {
     }
 
     /**
-     *    @brief  The getCursorPosition method returns the cursor position, in screen coordinates, relative to
-     *            the upper left corner of this window.
-     *    @param x The x-coordinate of the cursor.
-     *    @param y The y-coordinate of the cursor.
+     *  @brief  The getCursorPosition method returns the cursor position, in screen coordinates, relative to
+     *          the upper left corner of this window.
+     *  @param x The x-coordinate of the cursor.
+     *  @param y The y-coordinate of the cursor.
      */
     void Window::getCursorPosition(double &x, double &y) const
     {
@@ -532,10 +532,10 @@ namespace glfwm {
     }
 
     /**
-     *    @brief  The setCursorPosition method changes the cursor position, in screen coordinates, relative to
-     *            the upper left corner of this window.
-     *    @param x The new x-coordinate of the cursor.
-     *    @param y The new y-coordinate of the cursor.
+     *  @brief  The setCursorPosition method changes the cursor position, in screen coordinates, relative to
+     *          the upper left corner of this window.
+     *  @param x The new x-coordinate of the cursor.
+     *  @param y The new y-coordinate of the cursor.
      */
     void Window::setCursorPosition(double x, double y)
     {
@@ -545,6 +545,30 @@ namespace glfwm {
 #endif
         if (glfwWindow)
             glfwSetCursorPos(glfwWindow, x, y);
+    }
+
+    /**
+     *  @brief  The setIcon method sets the icon of this window.
+     *
+     *  If passed an array of candidate images, those of or closest to the sizes desired by the system are selected.
+     *  If no images are specified, the window reverts to its default icon.
+     *  The desired image sizes varies depending on platform and system settings. The selected images will be rescaled
+     *  as needed. Good sizes include 16x16, 32x32 and 48x48.
+     *
+     *  @param count  The number of images in the specified array, or zero to revert to the default window icon.
+     *  @param images The images to create the icon from. This is ignored if count is zero.
+     *  @note   On Mac OS X, the window has no icon, as it is not a document window, so this function does nothing.
+     *          The dock icon will be the same as the application bundle's icon.
+     *          This may only be called from the main thread.
+     */
+    void Window::setIcon(const int count, const GLFWimage *images)
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (glfwWindow)
+            glfwSetWindowIcon(glfwWindow, count, images);
     }
 
     /**
