@@ -568,6 +568,35 @@ namespace glfwm {
     }
 
     /**
+     *    @brief The setMonitor method sets this window at full-screen (if monitor != nullptr) or windowed (otherwise).
+     *
+     *    When setting a monitor, this function updates the width, height and refresh rate of the desired video mode
+     *    and switches to the video mode closest to it.
+     *    The window position is ignored when setting a monitor.
+     *    When the monitor is nullptr, the position, width and height are used to place the window client area.
+     *    The refresh rate is ignored when no monitor is specified.
+     *    If you only wish to update the resolution of a full screen window or the size of a windowed mode window, see setSize.
+     *    When a window transitions from full screen to windowed mode, this function restores any previous window settings
+     *    such as whether it is decorated, floating, resizable, has size or aspect ratio limits, etc..
+     *
+     *    @param monitor     The desired monitor, or nullptr to set windowed mode.
+     *    @param xpos        The desired x-coordinate of the upper-left corner of the client area.
+     *    @param ypos        The desired y-coordinate of the upper-left corner of the client area.
+     *    @param width       The desired with, in screen coordinates, of the client area or video mode.
+     *    @param height      The desired height, in screen coordinates, of the client area or video mode.
+     *    @param refreshRate The desired refresh rate, in Hz, of the video mode, or GLFW_DONT_CARE.
+     */
+    void Window::setMonitor(GLFWmonitor *monitor, int xpos, int ypos, int width, int height, int refreshRate)
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (glfwWindow)
+            glfwSetWindowMonitor(glfwWindow, monitor, xpos, ypos, width, height, refreshRate);
+    }
+
+    /**
      *  @brief  The getAttribute method returns this window attributes. See GLFW.
      *  @param  attribute The attribute to read.
      *  @return The value of attribute for this window.
