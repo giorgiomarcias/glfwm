@@ -497,6 +497,20 @@ namespace glfwm {
     }
 
     /**
+     *    @brief The maximize method maximizes the specified window if it was previously not maximized.
+     *           If the window is already maximized, this function does nothing.
+     */
+    void Window::maximize()
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (glfwWindow)
+            glfwMaximizeWindow(glfwWindow);
+    }
+
+    /**
      *  @brief  The iconify method minimizes this window.
      *  @note   This may only be called from the main thread.
      */

@@ -256,6 +256,12 @@ namespace glfwm {
         void setCursorPosition(double x, double y);
 
         /**
+         *    @brief The maximize method maximizes the specified window if it was previously not maximized.
+         *           If the window is already maximized, this function does nothing.
+         */
+        void maximize();
+
+        /**
          *  @brief  The iconify method minimizes this window.
          *  @note   This may only be called from the main thread.
          */
