@@ -183,6 +183,25 @@ namespace glfwm {
         void setSize(const int width, const int height);
 
         /**
+         *  @brief  The setSizeLimits method sets the size limits of the client area of the specified window.
+         *
+         *  If the window is full screen, the size limits only take effect once it is made windowed.
+         *  If the window is not resizable, this function does nothing.
+         *  The size limits are applied immediately to a windowed mode window and may cause it to be resized.
+         *  The maximum dimensions must be greater than or equal to the minimum dimensions and all must be
+         *  greater than or equal to zero.
+         *
+         *  @param minWidth  The minimum width, in screen coordinates, of the client area, or GLFW_DONT_CARE.
+         *  @param minHeight The minimum height, in screen coordinates, of the client area, or GLFW_DONT_CARE.
+         *  @param maxWidth  The maximum width, in screen coordinates, of the client area, or GLFW_DONT_CARE.
+         *  @param maxHeight The maximum height, in screen coordinates, of the client area, or GLFW_DONT_CARE.
+         *  @note   If you set size limits and an aspect ratio that conflict, the results are undefined.
+         *          This may only be called from the main thread.
+         */
+        void setSizeLimits(const int minWidth, const int minHeight, const int maxWidth, const int maxHeight);
+
+
+        /**
          *  @brief  The getFramebufferSize method returns the width and height of this window framebuffer.
          *  @param width The width of this window framebuffer.
          *  @param height The height of this window framebuffer.
@@ -323,7 +342,7 @@ namespace glfwm {
          *  @param refreshRate  The desired refresh rate, in Hz, of the video mode, or GLFW_DONT_CARE.
          *  @note   This may only be called from the main thread.
          */
-        void setMonitor(GLFWmonitor *monitor, int xpos, int ypos, int width, int height, int refreshRate);
+        void setMonitor(GLFWmonitor *monitor, const int xpos, const int ypos, const int width, const int height, const int refreshRate);
 
         /**
          *  @brief  The getAttribute method returns this window attributes. See GLFW.
