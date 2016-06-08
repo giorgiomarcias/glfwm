@@ -427,6 +427,26 @@ namespace glfwm {
          */
         void doneCurrentContext();
 
+#ifdef VK_VERSION_1_0
+        /**
+         *  @brief The createVulkanWindowSurface method creates a Vulkan surface for this window.
+         *
+         *  If the Vulkan loader was not found at initialization, this function returns VK_ERROR_INITIALIZATION_FAILED
+         *  and generates a GLFW_API_UNAVAILABLE error. Call glfwVulkanSupported to check whether the Vulkan loader was found.
+         *  If the required window surface creation instance extensions are not available or if the specified instance was not
+         *  created with these extensions enabled, this function returns VK_ERROR_EXTENSION_NOT_PRESENT and generates a
+         *  GLFW_API_UNAVAILABLE error. Call glfwGetRequiredInstanceExtensions to check what instance extensions are required.
+         *  The window surface must be destroyed before the specified Vulkan instance. It is the responsibility of the caller
+         *  to destroy the window surface. GLFW(M) does not destroy it for you. Call vkDestroySurfaceKHR to destroy the surface.
+         *
+         *    @param instance  The Vulkan instance to create the surface in.
+         *    @param allocator The allocator to use, or null_ptr to use the default allocator.
+         *    @param surface   Where to store the handle of the surface. This is set to VK_NULL_HANDLE if an error occurred.
+         *    @return VK_SUCCESS if successful, or a Vulkan error code if an error occurred.
+         */
+        VkResult createVulkanWindowSurface(VkInstance instance, const VkAllocationCallbacks * allocator, VkSurfaceKHR *surface);
+#endif
+
 
 
     private:
