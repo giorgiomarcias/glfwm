@@ -47,10 +47,25 @@ namespace glfwm {
         static void setHint(const int target, const int value);
 
         /**
-         *    @brief  The setPoll static method changes the current way of managing the event queue: process any event in the queue, or wait and then process them.
-         *    @param doPoll true for processing without waiting, false for waiting and then processing.
+         *  @brief  The setPoll static method changes the current way of managing the event queue: process any event in the queue soon,
+         *          or wait untill any events have occurred and process them.
+         *  @param doPoll true for processing without waiting, false for waiting and then processing.
          */
         static void setPoll(const bool doPoll);
+
+        /**
+         *  @brief  The setWaitTimeout method changes the current way of managing the event queue: process any event in the queue soon,
+         *          or wait untill timeout has expired or any events have occurred and process them.
+         *  @param timeout The maximum time to wait before processing the event queue.
+         *  @note 0 corresponds to poll, infinity corresponds to wait undefinitely, k corresponds to wait k seconds.
+         */
+        static void setWaitTimeout(const double timeout = std::numeric_limits<double>::infinity());
+
+        /**
+         *    @brief The getWaitTimeout method returns the current time to wait in the current polling events management.
+         *    @return The current timeout.
+         */
+        static double getWaitTimeout();
 
         /**
          *    @brief  The createWindow static method is a convenient way of constructing a new Window and directly registering the callbacks for the events of type eventTypes.
@@ -129,9 +144,9 @@ namespace glfwm {
         static void inputDropCallback(GLFWwindow *glfwWindow, int count, const char **paths);
 
 #ifndef NO_MULTITHREADING
-        static std::atomic<bool>    poll;       ///< Boolean indicating the current way of managing the event queue: true - poll, false - wait. Atomic version.
+        static std::atomic<double>  waitTimeout;    ///< Timeout for the polling event management: 0 -> poll, inf -> wait indefinitely, k -> wait k seconds.
 #else
-        static bool                 poll;       ///< Boolean indicating the current way of managing the event queue: true - poll, false - wait.
+        static double               waitTimeout;    ///< Timeout for the polling event management: 0 -> poll, inf -> wait indefinitely, k -> wait k seconds.
 #endif
     };
 

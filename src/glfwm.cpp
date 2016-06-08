@@ -16,9 +16,9 @@
 namespace glfwm {
 
 #ifndef NO_MULTITHREADING
-    std::atomic<bool>    WindowManager::poll(false);
+    std::atomic<double> WindowManager::waitTimeout(std::numeric_limits<double>::infinity());
 #else
-    bool                 WindowManager::poll = false;
+    bool                WindowManager::waitTimeout = std::numeric_limits<double>::infinity();
 #endif
 
     /**
@@ -58,14 +58,38 @@ namespace glfwm {
     }
 
     /**
-     *    @brief  The setPoll static method changes the current way of managing the event queue: process any event in the queue, or wait and then process them.
-     *    @param doPoll true for processing without waiting, false for waiting and then processing.
+     *  @brief  The setPoll static method changes the current way of managing the event queue: process any event in the queue soon,
+     *          or wait untill any events have occurred and process them.
+     *  @param doPoll true for processing without waiting, false for waiting and then processing.
      */
     void WindowManager::setPoll(const bool doPoll)
     {
-        poll = doPoll;
         if (doPoll)
+            setWaitTimeout(0.0);
+        else
+            setWaitTimeout(std::numeric_limits<double>::infinity());
+    }
+
+    /**
+     *  @brief  The setWaitTimeout method changes the current way of managing the event queue: process any event in the queue soon,
+     *          or wait untill timeout has expired or any events have occurred and process them.
+     *  @param timeout The maximum time to wait before processing the event queue.
+     *  @note 0 corresponds to poll, infinity corresponds to wait undefinitely, k corresponds to wait k seconds.
+     */
+    void WindowManager::setWaitTimeout(const double timeout)
+    {
+        waitTimeout = timeout;
+        if (waitTimeout == 0.0)
             UpdateMap::notify();
+    }
+
+    /**
+     *    @brief The getWaitTimeout method returns the current time to wait in the current polling events management.
+     *    @return The current timeout.
+     */
+    double WindowManager::getWaitTimeout()
+    {
+        return waitTimeout;
     }
 
     /**
@@ -231,11 +255,13 @@ namespace glfwm {
             }
 
             // manage events
-            if (poll) {
+            if (waitTimeout == 0.0) {
                 glfwPollEvents();
                 UpdateMap::setToUpdate(AllWindowGroupIDs, AllWindowIDs);
-            } else {
+            } else if(waitTimeout == std::numeric_limits<double>::infinity()) {
                 glfwWaitEvents();
+            } else {
+                glfwWaitEventsTimeout(waitTimeout);
             }
 
             // check for windows to close (and detach from groups)
