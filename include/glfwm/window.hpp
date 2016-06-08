@@ -200,6 +200,22 @@ namespace glfwm {
          */
         void setSizeLimits(const int minWidth, const int minHeight, const int maxWidth, const int maxHeight);
 
+        /**
+         *  @brief  The setAspectRatio method sets the required aspect ratio of the client area of the specified window.
+         *
+         *  If the window is full screen, the aspect ratio only takes effect once it is made windowed.
+         *  If the window is not resizable, this function does nothing.
+         *  The aspect ratio is specified as a numerator and a denominator and both values must be greater than zero.
+         *  For example, the common 16:9 aspect ratio is specified as 16 and 9, respectively.
+         *  If the numerator and denominator is set to GLFW_DONT_CARE then the aspect ratio limit is disabled.
+         *  The aspect ratio is applied immediately to a windowed mode window and may cause it to be resized.
+         *
+         *  @param numerator   The numerator of the desired aspect ratio, or GLFW_DONT_CARE.
+         *  @param denominator The denominator of the desired aspect ratio, or GLFW_DONT_CARE.
+         *  @note   If you set size limits and an aspect ratio that conflict, the results are undefined.
+         *          This may only be called from the main thread.
+         */
+        void setAspectRatio(const int numerator, const int denominator);
 
         /**
          *  @brief  The getFramebufferSize method returns the width and height of this window framebuffer.
