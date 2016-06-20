@@ -37,6 +37,9 @@
 
 #include <iostream>
 
+// Before the main header, if not in the CMakefile.txt, define any GLFW macro you need, e.g.:
+//#define GLFW_INCLUDE_GLCOREARB
+
 // Include the main header.
 // Depending on what you have to do (e.g. inherit some glfwm base class) you can include just any other header file.
 #include <glfwm/glfwm.hpp>
