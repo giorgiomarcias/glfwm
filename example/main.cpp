@@ -42,7 +42,7 @@
 
 // Include the main header.
 // Depending on what you have to do (e.g. inherit some glfwm base class) you can include just any other header file.
-#include <glfwm/glfwm.hpp>
+#include <GLFWM/glfwm.hpp>
 
 // This class responsible of drawing the content of a window must inherit glfwm::Drawable and
 // implement its draw abstract method. Note that the parameter id can be used to retrieve

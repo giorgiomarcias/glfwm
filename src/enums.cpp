@@ -11,7 +11,7 @@
 // Author: Giorgio Marcias
 // email: marcias.giorgio@gmail.com
 
-#include "enums.hpp"
+#include <GLFWM/enums.hpp>
 
 namespace glfwm {
 

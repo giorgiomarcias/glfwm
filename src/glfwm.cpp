@@ -11,7 +11,7 @@
 // Author: Giorgio Marcias
 // email: marcias.giorgio@gmail.com
 
-#include "glfwm.hpp"
+#include <GLFWM/glfwm.hpp>
 
 namespace glfwm {
 

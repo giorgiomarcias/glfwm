@@ -14,7 +14,7 @@
 #ifndef GLFWM_EVENT_HPP
 #define GLFWM_EVENT_HPP
 
-#include "enums.hpp"
+#include <GLFWM/enums.hpp>
 
 namespace glfwm {
 

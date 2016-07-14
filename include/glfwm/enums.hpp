@@ -14,7 +14,7 @@
 #ifndef GLFWM_ENUMS_HPP
 #define GLFWM_ENUMS_HPP
 
-#include "utility.hpp"
+#include <GLFWM/utility.hpp>
 
 namespace glfwm {
 

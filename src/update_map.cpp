@@ -11,7 +11,7 @@
 // Author: Giorgio Marcias
 // email: marcias.giorgio@gmail.com
 
-#include "update_map.hpp"
+#include <GLFWM/update_map.hpp>
 
 namespace glfwm {
 

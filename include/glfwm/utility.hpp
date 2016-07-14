@@ -14,7 +14,7 @@
 #ifndef GLFWM_UTILITY_HPP
 #define GLFWM_UTILITY_HPP
 
-#include "common.hpp"
+#include <GLFWM/common.hpp>
 
 namespace glfwm {
 

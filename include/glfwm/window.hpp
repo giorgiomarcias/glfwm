@@ -14,8 +14,8 @@
 #ifndef GLFWM_WINDOW_HPP
 #define GLFWM_WINDOW_HPP
 
-#include "event_handler.hpp"
-#include "drawable.hpp"
+#include <GLFWM/event_handler.hpp>
+#include <GLFWM/drawable.hpp>
 
 namespace glfwm {
 

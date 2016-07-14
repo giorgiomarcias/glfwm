@@ -11,7 +11,7 @@
 // Author: Giorgio Marcias
 // email: marcias.giorgio@gmail.com
 
-#include "event.hpp"
+#include <GLFWM/event.hpp>
 
 namespace glfwm {
 

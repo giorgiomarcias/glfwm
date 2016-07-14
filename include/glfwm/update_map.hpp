@@ -14,7 +14,7 @@
 #ifndef GLFWM_UPDATE_MAP_HPP
 #define GLFWM_UPDATE_MAP_HPP
 
-#include "enums.hpp"
+#include <GLFWM/enums.hpp>
 
 namespace glfwm {
 
