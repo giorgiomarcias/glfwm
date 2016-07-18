@@ -14,7 +14,7 @@
 #ifndef GLFWM_EVENT_HANDLER_HPP
 #define GLFWM_EVENT_HANDLER_HPP
 
-#include "event.hpp"
+#include <GLFWM/event.hpp>
 
 namespace glfwm {
 

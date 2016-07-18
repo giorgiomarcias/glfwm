@@ -37,16 +37,19 @@
 
 #include <iostream>
 
+// Before the main header, if not in the CMakefile.txt, define any GLFW macro you need, e.g.:
+//#define GLFW_INCLUDE_GLCOREARB
+
 // Include the main header.
 // Depending on what you have to do (e.g. inherit some glfwm base class) you can include just any other header file.
-#include <glfwm/glfwm.hpp>
+#include <GLFWM/glfwm.hpp>
 
 // This class responsible of drawing the content of a window must inherit glfwm::Drawable and
 // implement its draw abstract method. Note that the parameter id can be used to retrieve
 // that window specific resources (e.g. OpenGL buffers or VAOs).
 class MyDrawable : public glfwm::Drawable {
 public:
-    void draw(const glfwm::WindowID id)
+    void draw(const glfwm::WindowID id) override
     {
         // Here you can do anything you want for drawing, like glViewport(x, y, w, h).
         // Note: you don't have to call any swapping render buffer function, as it is
@@ -70,7 +73,7 @@ public:
     // It is essential that this method returns a mask corresponding to
     // the event types that can be handled, otherwise the handle() method won't never be called
     // for the events not indicated, even if they can actually be handled.
-    glfwm::EventBaseType getHandledEventTypes() const
+    glfwm::EventBaseType getHandledEventTypes() const override
     {
         return static_cast<glfwm::EventBaseType>(glfwm::EventType::MOUSE_BUTTON);
     }
@@ -86,7 +89,7 @@ public:
     // (see glfwm::Window::bindEventHandler()). If you want to execute more than one handler
     // for the same event, you are free to return false even having actually handled it; in
     // this way, the following handlers are called.
-    bool handle(const glfwm::EventPointer &e)
+    bool handle(const glfwm::EventPointer &e) override
     {
         if (e->getEventType() == glfwm::EventType::MOUSE_BUTTON) {
 
@@ -129,8 +132,7 @@ int main(int argc, char *argv[])
     glfwm::WindowManager::init();
 
     // You can set any GLFW hint with this method:
-    glfwm::WindowManager::setHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
-    glfwm::WindowManager::setHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwm::WindowManager::setHint(GLFW_CLIENT_API, GLFW_NO_API);
 
     // Remember to instantiate the handlers and the drawables to bind to the windows.
     // A handler can be bound to any number of different windows, and a window can have

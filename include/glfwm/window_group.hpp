@@ -14,8 +14,8 @@
 #ifndef GLFWM_WINDOW_GROUP_HPP
 #define GLFWM_WINDOW_GROUP_HPP
 
-#include "window.hpp"
-#include "update_map.hpp"
+#include <GLFWM/window.hpp>
+#include <GLFWM/update_map.hpp>
 
 namespace glfwm {
 

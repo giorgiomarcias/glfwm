@@ -11,7 +11,7 @@
 // Author: Giorgio Marcias
 // email: marcias.giorgio@gmail.com
 
-#include "window_group.hpp"
+#include <GLFWM/window_group.hpp>
 
 namespace glfwm {
 

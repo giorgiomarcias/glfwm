@@ -11,21 +11,20 @@
 # Author: Giorgio Marcias
 # email: marcias.giorgio@gmail.com
 
-PROJECT(glfwmExample)
-CMAKE_MINIMUM_REQUIRED(VERSION 3.1)
+cmake_minimum_required(VERSION 3.1)
+project(glfwmExample LANGUAGES CXX)
 
 # GLFWM
 # if you want to use glfwm without multi-threading, uncomment the following line
-#SET(WITH_MULTITHREADING OFF CACHE BOOL "Build GLFWM with multithreading facilities (i.e. thread-safe) or not.")
-ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR}/glfwm)
+#option(WITH_MULTITHREADING "Build GLFWM with multithreading facilities (i.e. thread-safe) or not." OFF)
+add_subdirectory(${${PROJECT_NAME}_SOURCE_DIR}/../.. ${${PROJECT_NAME}_BINARY_DIR}/glfwm)
 
 # create the executable
-ADD_EXECUTABLE(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} main.cpp)
 
-SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 11
     CXX_STANDARD_REQUIRED ON)
 
 # link libraries
-TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME} PUBLIC ${GLFWM_INCLUDE_DIRS})
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${GLFWM_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} glfwm)

@@ -14,8 +14,8 @@
 #ifndef GLFWM_WINDOW_HPP
 #define GLFWM_WINDOW_HPP
 
-#include "event_handler.hpp"
-#include "drawable.hpp"
+#include <GLFWM/event_handler.hpp>
+#include <GLFWM/drawable.hpp>
 
 namespace glfwm {
 
@@ -183,6 +183,41 @@ namespace glfwm {
         void setSize(const int width, const int height);
 
         /**
+         *  @brief  The setSizeLimits method sets the size limits of the client area of the specified window.
+         *
+         *  If the window is full screen, the size limits only take effect once it is made windowed.
+         *  If the window is not resizable, this function does nothing.
+         *  The size limits are applied immediately to a windowed mode window and may cause it to be resized.
+         *  The maximum dimensions must be greater than or equal to the minimum dimensions and all must be
+         *  greater than or equal to zero.
+         *
+         *  @param minWidth  The minimum width, in screen coordinates, of the client area, or GLFW_DONT_CARE.
+         *  @param minHeight The minimum height, in screen coordinates, of the client area, or GLFW_DONT_CARE.
+         *  @param maxWidth  The maximum width, in screen coordinates, of the client area, or GLFW_DONT_CARE.
+         *  @param maxHeight The maximum height, in screen coordinates, of the client area, or GLFW_DONT_CARE.
+         *  @note   If you set size limits and an aspect ratio that conflict, the results are undefined.
+         *          This may only be called from the main thread.
+         */
+        void setSizeLimits(const int minWidth, const int minHeight, const int maxWidth, const int maxHeight);
+
+        /**
+         *  @brief  The setAspectRatio method sets the required aspect ratio of the client area of the specified window.
+         *
+         *  If the window is full screen, the aspect ratio only takes effect once it is made windowed.
+         *  If the window is not resizable, this function does nothing.
+         *  The aspect ratio is specified as a numerator and a denominator and both values must be greater than zero.
+         *  For example, the common 16:9 aspect ratio is specified as 16 and 9, respectively.
+         *  If the numerator and denominator is set to GLFW_DONT_CARE then the aspect ratio limit is disabled.
+         *  The aspect ratio is applied immediately to a windowed mode window and may cause it to be resized.
+         *
+         *  @param numerator   The numerator of the desired aspect ratio, or GLFW_DONT_CARE.
+         *  @param denominator The denominator of the desired aspect ratio, or GLFW_DONT_CARE.
+         *  @note   If you set size limits and an aspect ratio that conflict, the results are undefined.
+         *          This may only be called from the main thread.
+         */
+        void setAspectRatio(const int numerator, const int denominator);
+
+        /**
          *  @brief  The getFramebufferSize method returns the width and height of this window framebuffer.
          *  @param width The width of this window framebuffer.
          *  @param height The height of this window framebuffer.
@@ -240,20 +275,43 @@ namespace glfwm {
         void setCursor(GLFWcursor *cursor);
 
         /**
-         *    @brief  The getCursorPosition method returns the cursor position, in screen coordinates, relative to
-         *            the upper left corner of this window.
-         *    @param x The x-coordinate of the cursor.
-         *    @param y The y-coordinate of the cursor.
+         *  @brief  The getCursorPosition method returns the cursor position, in screen coordinates, relative to
+         *          the upper left corner of this window.
+         *  @param x The x-coordinate of the cursor.
+         *  @param y The y-coordinate of the cursor.
          */
         void getCursorPosition(double &x, double &y) const;
 
         /**
-         *    @brief  The setCursorPosition method changes the cursor position, in screen coordinates, relative to
-         *            the upper left corner of this window.
-         *    @param x The new x-coordinate of the cursor.
-         *    @param y The new y-coordinate of the cursor.
+         *  @brief  The setCursorPosition method changes the cursor position, in screen coordinates, relative to
+         *          the upper left corner of this window.
+         *  @param x The new x-coordinate of the cursor.
+         *  @param y The new y-coordinate of the cursor.
          */
         void setCursorPosition(double x, double y);
+
+        /**
+         *  @brief  The setIcon method sets the icon of this window.
+         *
+         *  If passed an array of candidate images, those of or closest to the sizes desired by the system are selected.
+         *  If no images are specified, the window reverts to its default icon.
+         *  The desired image sizes varies depending on platform and system settings. The selected images will be rescaled
+         *  as needed. Good sizes include 16x16, 32x32 and 48x48.
+         *
+         *  @param count  The number of images in the specified array, or zero to revert to the default window icon.
+         *  @param images The images to create the icon from. This is ignored if count is zero.
+         *  @note   On Mac OS X, the window has no icon, as it is not a document window, so this function does nothing.
+         *          The dock icon will be the same as the application bundle's icon.
+         *          This may only be called from the main thread.
+         */
+        void setIcon(const int count, const GLFWimage *images);
+
+        /**
+         *  @brief  The maximize method maximizes the specified window if it was previously not maximized.
+         *          If the window is already maximized, this function does nothing.
+         *  @note   This may only be called from the main thread.
+         */
+        void maximize();
 
         /**
          *  @brief  The iconify method minimizes this window.
@@ -280,11 +338,43 @@ namespace glfwm {
         void show();
 
         /**
+         *  @brief  The focus method brings the specified window to front and sets input focus. By default,
+         *          both windowed and full screen mode windows are focused when initially created. Set the GLFW_FOCUSED to disable this behavior.
+         *  @note   The window should already be visible and not iconified. Do not use this function to steal focus
+         *          from other applications unless you are certain that is what the user wants.
+         *          Focus stealing can be extremely disruptive.
+         *          This may only be called from the main thread.
+         */
+        void focus();
+
+        /**
          *  @brief  The getMonitor method returns the GLFWMonitor this window uses in fullscreen.
          *  @return This window monitor.
          *  @note   This may only be called from the main thread.
          */
         GLFWmonitor * getMonitor() const;
+
+        /**
+         *  @brief  The setMonitor method sets this window at full-screen (if monitor != nullptr) or windowed (otherwise).
+         *
+         *  When setting a monitor, this function updates the width, height and refresh rate of the desired video mode
+         *  and switches to the video mode closest to it.
+         *  The window position is ignored when setting a monitor.
+         *  When the monitor is nullptr, the position, width and height are used to place the window client area.
+         *  The refresh rate is ignored when no monitor is specified.
+         *  If you only wish to update the resolution of a full screen window or the size of a windowed mode window, see setSize.
+         *  When a window transitions from full screen to windowed mode, this function restores any previous window settings
+         *  such as whether it is decorated, floating, resizable, has size or aspect ratio limits, etc..
+         *
+         *  @param monitor      The desired monitor, or nullptr to set windowed mode.
+         *  @param xpos         The desired x-coordinate of the upper-left corner of the client area.
+         *  @param ypos         The desired y-coordinate of the upper-left corner of the client area.
+         *  @param width        The desired with, in screen coordinates, of the client area or video mode.
+         *  @param height       The desired height, in screen coordinates, of the client area or video mode.
+         *  @param refreshRate  The desired refresh rate, in Hz, of the video mode, or GLFW_DONT_CARE.
+         *  @note   This may only be called from the main thread.
+         */
+        void setMonitor(GLFWmonitor *monitor, const int xpos, const int ypos, const int width, const int height, const int refreshRate);
 
         /**
          *  @brief  The getAttribute method returns this window attributes. See GLFW.
@@ -336,6 +426,26 @@ namespace glfwm {
          *          This method does nothing if NO_MULTITHREADING is defined.
          */
         void doneCurrentContext();
+
+#ifdef VK_VERSION_1_0
+        /**
+         *  @brief The createVulkanWindowSurface method creates a Vulkan surface for this window.
+         *
+         *  If the Vulkan loader was not found at initialization, this function returns VK_ERROR_INITIALIZATION_FAILED
+         *  and generates a GLFW_API_UNAVAILABLE error. Call glfwVulkanSupported to check whether the Vulkan loader was found.
+         *  If the required window surface creation instance extensions are not available or if the specified instance was not
+         *  created with these extensions enabled, this function returns VK_ERROR_EXTENSION_NOT_PRESENT and generates a
+         *  GLFW_API_UNAVAILABLE error. Call glfwGetRequiredInstanceExtensions to check what instance extensions are required.
+         *  The window surface must be destroyed before the specified Vulkan instance. It is the responsibility of the caller
+         *  to destroy the window surface. GLFW(M) does not destroy it for you. Call vkDestroySurfaceKHR to destroy the surface.
+         *
+         *    @param instance  The Vulkan instance to create the surface in.
+         *    @param allocator The allocator to use, or null_ptr to use the default allocator.
+         *    @param surface   Where to store the handle of the surface. This is set to VK_NULL_HANDLE if an error occurred.
+         *    @return VK_SUCCESS if successful, or a Vulkan error code if an error occurred.
+         */
+        VkResult createVulkanWindowSurface(VkInstance instance, const VkAllocationCallbacks * allocator, VkSurfaceKHR *surface);
+#endif
 
 
 
