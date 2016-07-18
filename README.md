@@ -144,7 +144,7 @@ Then create some `Window` and bind the handler and the drawable to it:
     mainWin->bindDrawable(myDrawable, 0);       // 0 is the rank among all drawables bound
 
 Possibly create other windows and group them.
-Groups are usefull for concurrent management (i.e. multi-threaded windows) or even just for sending notifications to all the windows in the same group.
+Groups are useful for concurrent management (i.e. multi-threaded windows) or even just for sending notifications to all the windows in the same group.
 Notifications can be used to make several windows react to a single event.
 To create a group and attach windows:
 
