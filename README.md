@@ -137,7 +137,6 @@ There put the code responsible of drawing the content, e.g. OpenGL calls:
 
 Then create some `Window` and bind the handler and the drawable to it:
 
-    ...
     std::shared_ptr<MyHandler> myHandler = std::make_shared<MyHandler>();
     std::shared_ptr<MyDrawable> myDrawable = std::make_shared<MyDrawable>();
     glfwm::WindowPointer mainWin = glfwm::WindowManager::createWindow(800, 600, std::string(), myHandler->getHandledEventTypes());
@@ -151,14 +150,14 @@ To create a group and attach windows:
 
     glfwm::WindowGroupPointer grp = glfwm::WindowGroup::newGroup();
     grp->attachWindow(mainWin->getID());
-    grp->runLoopConcurrently();     // this is available if compiled with WITH_MULTITHREADING=ON
+    grp->runLoopConcurrently();     // this is available only if compiled with WITH_MULTITHREADING=ON
 
 Finally, start the main loop, which ends when all the windows are closed, and release the library resources:
 
     glfwm::WindowManager::mainLoop();
     glfwm::WindowManager::terminate();
 
-
+See the examples for more details.
 
 It has been tested on Mac OS X 10.9 - 10.10 - 10.11
 

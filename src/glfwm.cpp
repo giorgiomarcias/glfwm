@@ -18,7 +18,7 @@ namespace glfwm {
 #ifndef NO_MULTITHREADING
     std::atomic<double> WindowManager::waitTimeout(std::numeric_limits<double>::infinity());
 #else
-    bool                WindowManager::waitTimeout = std::numeric_limits<double>::infinity();
+    double              WindowManager::waitTimeout = std::numeric_limits<double>::infinity();
 #endif
 
     /**
