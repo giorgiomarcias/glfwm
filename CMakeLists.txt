@@ -15,21 +15,27 @@ cmake_minimum_required(VERSION 3.1)
 
 project(glfwm LANGUAGES CXX)
 
-set(${PROJECT_NAME}_VERSION_MAJOR "3")
-set(${PROJECT_NAME}_VERSION_MINOR "2")
-set(${PROJECT_NAME}_VERSION_PATCH "0")
-set(${PROJECT_NAME}_VERSION_TWEAK "")
-set(${PROJECT_NAME}_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}")
-set(${PROJECT_NAME}_VERSION_FULL "${${PROJECT_NAME}_VERSION}.${${PROJECT_NAME}_VERSION_PATCH}${${PROJECT_NAME}_VERSION_TWEAK}")
+# set current glfwm version
+set(GLFWM_VERSION_MAJOR "3")
+set(GLFWM_VERSION_MINOR "2")
+set(GLFWM_VERSION_PATCH "0")
+set(GLFWM_VERSION_TWEAK "")
+set(GLFWM_VERSION "${GLFWM_VERSION_MAJOR}.${GLFWM_VERSION_MINOR}")
+set(GLFWM_VERSION_FULL "${GLFWM_VERSION}.${GLFWM_VERSION_PATCH}${GLFWM_VERSION_TWEAK}")
+
+# depending on whether this list file is included with add_subdirectory or not, behaviour changes
+get_directory_property(GLFWM_PARENT_DIRECTORY PARENT_DIRECTORY)
+
+
+
+# dependencies:
 
 # GLFW
 find_package(glfw3 3.2 REQUIRED)
 
 
 
-get_directory_property(GLFWM_PARENT_DIRECTORY PARENT_DIRECTORY)
-
-
+# options:
 
 option(WITH_MULTITHREADING "Build GLFWM with multithreading facilities (i.e. thread-safe) or not." ON)
 
@@ -52,6 +58,7 @@ if(NOT GLFWM_PARENT_DIRECTORY AND NOT CMAKE_BUILD_TYPE)
 endif(NOT GLFWM_PARENT_DIRECTORY AND NOT CMAKE_BUILD_TYPE)
 
 
+# collect source files
 set(HDR_DIR_NAME "GLFWM")
 set(HDR_DIR "${${PROJECT_NAME}_SOURCE_DIR}/include")
 set(HDRS
@@ -75,13 +82,20 @@ set(SRCS
     ${SRC_DIR}/window_group.cpp
     ${SRC_DIR}/glfwm.cpp)
 
+
+
+# create the target library
 add_library(${PROJECT_NAME} ${HDRS} ${SRCS})
+
+
+
+# set target properties:
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 11
     CXX_STANDARD_REQUIRED ON
-    VERSION ${${PROJECT_NAME}_VERSION}
-    SOVERSION ${${PROJECT_NAME}_VERSION_MAJOR}
+    VERSION ${GLFWM_VERSION}
+    SOVERSION ${GLFWM_VERSION_MAJOR}
 )
 if(NOT GLFWM_PARENT_DIRECTORY)
     set_target_properties(${PROJECT_NAME} PROPERTIES POSITION_INDEPENDENT_CODE ON)
@@ -92,41 +106,47 @@ target_include_directories(${PROJECT_NAME} INTERFACE
                            $<BUILD_INTERFACE:${HDR_DIR}>
                            $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/include>
 )
+
 target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
 if(NOT WITH_MULTITHREADING)
     target_compile_definitions(${PROJECT_NAME} PRIVATE NO_MULTITHREADING)
 endif(NOT WITH_MULTITHREADING)
 
-# expose the directories
-if(GLFWM_PARENT_DIRECTORY)
-    set(GLFWM_TARGET ${PROJECT_NAME} PARENT_SCOPE)
-    set(GLFWM_INCLUDE_DIRS ${HDR_DIR} PARENT_SCOPE)
-    set(GLFWM_LIBRARIES ${PROJECT_NAME} PARENT_SCOPE)
-endif(GLFWM_PARENT_DIRECTORY)
 
+
+# installation directives:
 if(INSTALL_GLFWM)
+    # first, install the target library
     install(TARGETS ${PROJECT_NAME}
-            EXPORT ${PROJECT_NAME}
+            EXPORT ${PROJECT_NAME}Targets
             LIBRARY DESTINATION lib
-            INCLUDES DESTINATION include
+            INCLUDES DESTINATION include # this appears in INTERFACE properties when exporting
     )
+    # install the header files
     install(DIRECTORY ${HDR_DIR}/${HDR_DIR_NAME} DESTINATION include)
 
-    include(CMakePackageConfigHelpers)
-    set(${PROJECT_NAME}_CONFIG_PATH "lib/cmake/${PROJECT_NAME}")
+    # set and intall the cmake config files, s.t. consumers can easily find this library locations and properties
+    set(GLFWM_CONFIG_PATH "lib/cmake/${PROJECT_NAME}")
 
+    include(CMakePackageConfigHelpers)
+    configure_package_config_file(cmake/glfwmConfig.cmake.in
+                                  ${PROJECT_NAME}Config.cmake
+                                  INSTALL_DESTINATION "${GLFWM_CONFIG_PATH}"
+                                  NO_CHECK_REQUIRED_COMPONENTS_MACRO
+    )
     write_basic_package_version_file(${PROJECT_NAME}ConfigVersion.cmake
-                                     VERSION ${${PROJECT_NAME}_VERSION_FULL}
+                                     VERSION ${GLFWM_VERSION_FULL}
                                      COMPATIBILITY SameMajorVersion
     )
     install(FILES
+            ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}Config.cmake
             ${${PROJECT_NAME}_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-            DESTINATION "${${PROJECT_NAME}_CONFIG_PATH}"
+            DESTINATION "${GLFWM_CONFIG_PATH}"
     )
 
-    install(EXPORT ${PROJECT_NAME}
-            DESTINATION ${${PROJECT_NAME}_CONFIG_PATH}
-            CONFIGURATIONS Release
+    install(EXPORT ${PROJECT_NAME}Targets
+            DESTINATION ${GLFWM_CONFIG_PATH}
+            FILE ${PROJECT_NAME}Targets.cmake
             EXPORT_LINK_INTERFACE_LIBRARIES
     )
 endif(INSTALL_GLFWM)
