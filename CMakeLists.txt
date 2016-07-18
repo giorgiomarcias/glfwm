@@ -37,7 +37,7 @@ find_package(glfw3 3.2 REQUIRED)
 
 # options:
 
-option(WITH_MULTITHREADING "Build GLFWM with multithreading facilities (i.e. thread-safe) or not." ON)
+option(WITH_MULTITHREADING "Build GLFWM with multithreading (i.e. thread-safe) or not." ON)
 
 if(GLFWM_PARENT_DIRECTORY)
     set(MAKE_SHARED OFF)
