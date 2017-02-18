@@ -203,7 +203,7 @@ namespace glfwm {
             // update groups and windows
             while (!UpdateMap::empty()) {
                 UpdateMap::popGroup(gID, wIDs);
-                if (gID == AllWindowIDs) {
+                if (gID == AllWindowGroupIDs) {
                     WindowGroup::getAllWindowGroupIDs(gIDs);
                     for (auto id : gIDs) {
                         g = WindowGroup::getGroup(id);
