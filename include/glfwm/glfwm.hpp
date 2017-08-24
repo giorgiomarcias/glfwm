@@ -14,6 +14,7 @@
 #ifndef GLFWM_HPP
 #define GLFWM_HPP
 
+#include <atomic>
 #include <GLFWM/window_group.hpp>
 
 namespace glfwm {
