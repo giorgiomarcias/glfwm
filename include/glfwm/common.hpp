@@ -34,6 +34,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <thread>
+#include <atomic>
 #endif
 
 // GLFW and OpenGL
