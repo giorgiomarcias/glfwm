@@ -16,6 +16,9 @@
 
 #include <GLFWM/window.hpp>
 #include <GLFWM/update_map.hpp>
+#ifndef NO_MULTITHREADING
+	#include <atomic>
+#endif
 
 namespace glfwm {
 
