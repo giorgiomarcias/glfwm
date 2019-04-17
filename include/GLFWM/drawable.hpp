@@ -21,6 +21,8 @@ namespace glfwm {
     /// The Drawable class represents objects that can be rendered in a window. Inherit this class and bind its objects to a window to be displayed.
     class Drawable {
     public:
+		virtual ~Drawable() = default;
+
         /**
          *    @brief  The draw method is responsible of performing the rendering of an object of this class. It must be implemented in derived classes.
          *    @param id The ID of the window calling this method at a given time.

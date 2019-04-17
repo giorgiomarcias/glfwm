@@ -21,6 +21,8 @@ namespace glfwm {
     /// The EventHandler class represents an entity able to handle an Event. Inherit this class and bind its objects to a window to react to events with specialized actions.
     class EventHandler {
     public:
+		virtual ~EventHandler() = default;
+
         /**
          *    @brief  The getHandledEventTypes method returns a bitwise OR combination of the EventTypes
          *            this object is able to handle.
