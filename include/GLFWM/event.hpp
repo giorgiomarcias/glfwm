@@ -514,6 +514,76 @@ namespace glfwm {
 
 
 
+	/**
+	 *  @brief  The EventContentScale class represents a window's content scale change event.
+	 */
+	class EventContentScale : public Event {
+	public:
+		/**
+		 *  @brief  Default constructor.
+		 */
+		EventContentScale();
+		
+		/**
+		 *  @brief  Initializer constructor.
+		 *  @param  id The ID of the window.
+		 *  @param  x The new scale in x.
+		 *  @param  y The new scale in y.
+		 */
+		EventContentScale(const WindowID id, const float x, const float y);
+		
+		/**
+		 *  @brief  Copy constructor.
+		 *  @param  efs The EventContentScale to copy.
+		 */
+		EventContentScale(const EventContentScale &efs);
+		
+		/**
+		 *  @brief  The move constructor is deleted, i.e. an EventContentScale can not be moved.
+		 *  @param  The EventContentScale to move.
+		 */
+		EventContentScale(EventContentScale &&) = delete;
+		
+		/**
+		 *  @brief  The copy operator is deleted, i.e. an EventContentScale can not be copied.
+		 *  @param  The EventContentScale to copy.
+		 *  @return A reference to this EventContentScale.
+		 */
+		EventContentScale & operator =(const EventContentScale &) = delete;
+		
+		/**
+		 *  @brief  The move operator is deleted, i.e. an EventContentScale can not be moved.
+		 *  @param  The EventContentScale to move.
+		 *  @return A reference to this EventContentScale.
+		 */
+		EventContentScale & operator =(EventContentScale &&) = delete;
+		
+		/**
+		 *  @brief  Returns the new scale in x of this window content scale change event.
+		 *  @return The new scale in x.
+		 */
+		float getXScale() const;
+		
+		/**
+		 *  @brief  Returns the new scale in y of this window content scale change event.
+		 *  @return The new scale in y.
+		 */
+		float getYScale() const;
+		
+	private:
+		/**
+		 *  @brief  The scale in x associated to this window content scale change event.
+		 */
+		const float   xScale;
+		
+		/**
+		 *  @brief  The scale in y associated to this window content scale event.
+		 */
+		const float   yScale;
+	};
+
+
+
     /**
      *  @brief  The EventChar class represents a Unicode character input event.
      */

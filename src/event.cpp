@@ -260,6 +260,45 @@ namespace glfwm {
 
 
 
+	/**
+	 *  @brief  Default constructor.
+	 */
+	EventContentScale::EventContentScale() : Event(AllWindowIDs, EventType::CONTENTSCALE), xScale(0), yScale(0) {}
+	
+	/**
+	 *  @brief  Initializer constructor.
+	 *  @param  id The ID of the window.
+	 *  @param  x The new scale in x.
+	 *  @param  y The new scale in y.
+	 */
+	EventContentScale::EventContentScale(const WindowID id, const float x, const float y)
+	: Event(id, EventType::CONTENTSCALE), xScale(x), yScale(y) {}
+	
+	/**
+	 *  @brief  Copy constructor.
+	 *  @param  efs The EventContentScale to copy.
+	 */
+	EventContentScale::EventContentScale(const EventContentScale &ecs)
+	: Event(ecs), xScale(ecs.xScale), yScale(ecs.yScale) {}
+	
+	/**
+	 *  @brief  Returns the new scale in x of this window content scale change event.
+	 *  @return The new scale in x.
+	 */
+	float EventContentScale::getXScale() const {
+		return xScale;
+	}
+	
+	/**
+	 *  @brief  Returns the new scale in y of this window content scale change event.
+	 *  @return The new scale in y.
+	 */
+	float EventContentScale::getYScale() const {
+		return yScale;
+	}
+
+
+
     /**
      *  @brief  Default constructor.
      */
