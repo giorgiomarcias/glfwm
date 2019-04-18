@@ -134,6 +134,7 @@ namespace glfwm {
         static void windowFocusCallback(GLFWwindow *glfwWindow, int hasFocus);
         static void windowIconifyCallback(GLFWwindow *glfwWindow, int toIconify);
         static void windowFramebufferSizeCallback(GLFWwindow *glfwWindow, int width, int height);
+		static void windowContentScaleCallback(GLFWwindow *glfwWindow, float xScale, float yScale);
         static void inputMouseButtonCallback(GLFWwindow *glfwWindow, int button, int action, int mods);
         static void inputCursorPostionCallback(GLFWwindow *glfwWindow, double x, double y);
         static void inputCursorEnterCallback(GLFWwindow *glfwWindow, int enter);

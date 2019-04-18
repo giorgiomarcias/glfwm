@@ -147,6 +147,8 @@ namespace glfwm {
             glfwSetWindowIconifyCallback(window->glfwWindow, windowIconifyCallback);
         if (eventTypes & EventType::FRAMEBUFFERSIZE)
             glfwSetFramebufferSizeCallback(window->glfwWindow, windowFramebufferSizeCallback);
+		if (eventTypes & EventType::CONTENTSCALE)
+			glfwSetWindowContentScaleCallback(window->glfwWindow, windowContentScaleCallback);
         if (eventTypes & EventType::CHAR)
             glfwSetCharCallback(window->glfwWindow, inputCharCallback);
         if (eventTypes & EventType::CHARMOD)
@@ -324,7 +326,7 @@ namespace glfwm {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Size event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         // if found, make it handle the event
@@ -354,7 +356,7 @@ namespace glfwm {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Close event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         // if found, make it handle the event
@@ -372,7 +374,7 @@ namespace glfwm {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Refresh event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         // if found, make it handle the event
@@ -402,7 +404,7 @@ namespace glfwm {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Focus event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         // if found, make it handle the event
@@ -432,7 +434,7 @@ namespace glfwm {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Iconify event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         // if found, make it handle the event
@@ -462,7 +464,7 @@ namespace glfwm {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Framebugger size event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         // if found, make it handle the event
@@ -488,11 +490,41 @@ namespace glfwm {
         }
     }
 
+	void WindowManager::windowContentScaleCallback(GLFWwindow *glfwWindow, float xScale, float yScale) {
+		// find the target Window
+		WindowID wID = Window::getWindowID(glfwWindow);
+		if (wID > LastWindowID) {
+			std::cout << "Warning. Content scale event received for unregistered Window. Discarded." << std::endl;
+			return;
+		}
+		// if found, make it handle the event
+		EventPointer ecs = std::make_shared<EventContentScale>(wID, xScale, yScale);
+		WindowPointer w = Window::getWindow(wID);
+		if (w) {
+			w->makeContextCurrent();
+			w->handleEvent(ecs);
+			w->doneCurrentContext();
+			// if this window is being rendered concurrently, update soon
+			WindowGroupID gID = WindowGroup::getWindowGroup(wID);
+#ifndef NO_MULTITHREADING
+			WindowGroupPointer g = WindowGroup::getGroup(gID);
+			if (g && g->isRunningConcurrently()) {
+				g->setWindowToUpdate(wID);
+				g->process();
+			} else {    // otherwise update all together
+				UpdateMap::setToUpdate(gID, wID);
+			}
+#else
+			UpdateMap::setToUpdate(gID, wID);
+#endif
+		}
+	}
+
     void WindowManager::inputMouseButtonCallback(GLFWwindow *glfwWindow, int button, int action, int mods) {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Mouse button event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         // if found, make it handle the event
@@ -522,7 +554,7 @@ namespace glfwm {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Cursor position event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         // if found, make it handle the event
@@ -552,7 +584,7 @@ namespace glfwm {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Cursor enter event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         // if found, make it handle the event
@@ -582,7 +614,7 @@ namespace glfwm {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Scroll event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         // if found, make it handle the event
@@ -612,7 +644,7 @@ namespace glfwm {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Input key event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         // if found, make it handle the event
@@ -642,7 +674,7 @@ namespace glfwm {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Input char event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         // if found, make it handle the event
@@ -672,7 +704,7 @@ namespace glfwm {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Input char mod event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         // if found, make it handle the event
@@ -702,7 +734,7 @@ namespace glfwm {
         // find the target Window
         WindowID wID = Window::getWindowID(glfwWindow);
         if (wID > LastWindowID) {
-            std::cout << "Warning. Position event received for unregistered Window. Discarded." << std::endl;
+            std::cout << "Warning. Drop event received for unregistered Window. Discarded." << std::endl;
             return;
         }
         if (count <= 0)
