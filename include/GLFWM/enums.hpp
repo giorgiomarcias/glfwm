@@ -324,15 +324,16 @@ namespace glfwm {
         WINDOW_FOCUS                            =   0x0010,
         WINDOW_ICONIFY                          =   0x0020,
         FRAMEBUFFERSIZE                         =   0x0040,
+		CONTENTSCALE							=	0x0080,
         // input events
-        CHAR                                    =   0x0080,
-        CHARMOD                                 =   0x0100,
-        CURSOR_ENTER                            =   0x0200,
-        CURSOR_POSITION                         =   0x0400,
-        DROP                                    =   0x0800,
-        KEY                                     =   0x1000,
-        MOUSE_BUTTON                            =   0x2000,
-        SCROLL                                  =   0x4000
+        CHAR                                    =   0x0100,
+        CHARMOD                                 =   0x0200,
+        CURSOR_ENTER                            =   0x0400,
+        CURSOR_POSITION                         =   0x0800,
+        DROP                                    =   0x1000,
+        KEY                                     =   0x2000,
+        MOUSE_BUTTON                            =   0x4000,
+        SCROLL                                  =   0x8000
     };
 
     // overloading NOT for event types
@@ -383,6 +384,7 @@ namespace glfwm {
                                             | EventType::WINDOW_FOCUS
                                             | EventType::WINDOW_ICONIFY
                                             | EventType::FRAMEBUFFERSIZE
+                                            | EventType::CONTENTSCALE
                                             | EventType::CHAR
                                             | EventType::CHARMOD
                                             | EventType::CURSOR_ENTER
