@@ -428,6 +428,30 @@ namespace glfwm {
             glfwGetWindowFrameSize(glfwWindow, &left, &top, &right, &bottom);
     }
 
+	/**
+	 *  @brief  The getContentScale method retrieves the content scale for the specified window.
+	 *
+	 *  The content scale is the ratio between the current DPI and the platform's default DPI. This is especially
+	 *  important for text and any UI elements. If the pixel dimensions of your UI scaled by this look appropriate
+	 *  on your machine then it should appear at a reasonable size on other machines regardless of their DPI and
+	 *  scaling settings. This relies on the system DPI and scaling settings being somewhat correct.
+	 *
+	 *  On systems where each monitors can have its own content scale, the window content scale will depend on
+	 *  which monitor the system considers the window to be on.
+	 *  @param xScale The scale in x of this window content.
+	 *  @param yScale The scale in y of this window content.
+	 *  @note   This may only be called from the main thread.
+	 */
+	void Window::getContentScale(float &xScale, float &yScale) const
+	{
+#ifndef NO_MULTITHREADING
+		// acquire ownership
+		std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+		if (glfwWindow)
+			glfwGetWindowContentScale(glfwWindow, &xScale, &yScale);
+	}
+
     /**
      *  @brief  The getInputMode method returns the current value of an input mode for this Window.
      *  @param inputMode The input mode to query for its value.
