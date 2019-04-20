@@ -15,7 +15,7 @@ cmake_minimum_required(VERSION 3.1)
 project(glfwmExample LANGUAGES CXX)
 
 # find GLFWM
-find_package(glfwm 3.2 REQUIRED CONFIG)
+find_package(glfwm 3.3 REQUIRED CONFIG)
 
 # create the executable
 add_executable(${PROJECT_NAME} main.cpp)
