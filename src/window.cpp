@@ -453,6 +453,48 @@ namespace glfwm {
 	}
 
     /**
+     * @brief The getOpacity method returns the opacity of the window, including any decorations.
+     *
+     * The opacity (or alpha) value is a positive finite number between zero and one, where zero is fully
+     * transparent and one is fully opaque. If the system does not support whole window transparency, this
+     * method always returns one. The initial opacity value for newly created windows is one.
+     *
+     * @note   This may only be called from the main thread.
+     * @return float The opacity value of this window.
+     */
+    float Window::getOpacity() const
+	{
+#ifndef NO_MULTITHREADING
+		// acquire ownership
+		std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+		if (glfwWindow)
+			return glfwGetWindowOpacity(glfwWindow);
+        return 0;
+	}
+
+    /**
+     * @brief The setOpacity method sets the opacity of the window, including any decorations.
+     * 
+     * The opacity (or alpha) value is a positive finite number between zero and one, where zero is fully
+     * transparent and one is fully opaque. The initial opacity value for newly created windows is one.
+     * A window created with framebuffer transparency may not use whole window transparency. The results of doing
+     * this are undefined.
+     *
+     * @param opacity The opacity to set to this window.
+     * @note   This may only be called from the main thread.
+     */
+    void Window::setOpacity(float opacity)
+	{
+#ifndef NO_MULTITHREADING
+		// acquire ownership
+		std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+		if (glfwWindow)
+			glfwSetWindowOpacity(glfwWindow, opacity);
+	}
+
+    /**
      *  @brief  The getInputMode method returns the current value of an input mode for this Window.
      *  @param inputMode The input mode to query for its value.
      *  @return The value of the specified input mode.

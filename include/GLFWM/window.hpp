@@ -250,6 +250,31 @@ namespace glfwm {
 		 *  @note   This may only be called from the main thread.
 		 */
 		void getContentScale(float &xScale, float &yScale) const;
+		
+		/**
+		 * @brief The getOpacity method returns the opacity of the window, including any decorations.
+         *
+         * The opacity (or alpha) value is a positive finite number between zero and one, where zero is fully
+         * transparent and one is fully opaque. If the system does not support whole window transparency, this
+         * method always returns one. The initial opacity value for newly created windows is one.
+         *
+         * @note   This may only be called from the main thread.
+		 * @return float The opacity value of this window.
+		 */
+		float getOpacity() const;
+
+        /**
+         * @brief The setOpacity method sets the opacity of the window, including any decorations.
+         * 
+         * The opacity (or alpha) value is a positive finite number between zero and one, where zero is fully
+         * transparent and one is fully opaque. The initial opacity value for newly created windows is one.
+         * A window created with framebuffer transparency may not use whole window transparency. The results of doing
+         * this are undefined.
+         *
+         * @param opacity The opacity to set to this window.
+         * @note   This may only be called from the main thread.
+         */
+		void setOpacity(float opacity);
 
         /**
          *  @brief  The getInputMode method returns the current value of an input mode for this Window.
