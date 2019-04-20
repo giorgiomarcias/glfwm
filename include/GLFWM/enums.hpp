@@ -315,25 +315,26 @@ namespace glfwm {
      *  @brief  The EventType enum represents the event types.
      */
     enum class EventType : EventBaseType {
-        EMPTY                                   =   0x0000,
+        EMPTY                                   =   0x00000,
         // window events
-        WINDOW_POSITION                         =   0x0001,
-        WINDOW_SIZE                             =   0x0002,
-        WINDOW_CLOSE                            =   0x0004,
-        WINDOW_REFRESH                          =   0x0008,
-        WINDOW_FOCUS                            =   0x0010,
-        WINDOW_ICONIFY                          =   0x0020,
-        FRAMEBUFFERSIZE                         =   0x0040,
-		CONTENTSCALE							=	0x0080,
+        WINDOW_POSITION                         =   0x00001,
+        WINDOW_SIZE                             =   0x00002,
+        WINDOW_CLOSE                            =   0x00004,
+        WINDOW_REFRESH                          =   0x00008,
+        WINDOW_FOCUS                            =   0x00010,
+        WINDOW_ICONIFY                          =   0x00020,
+        WINDOW_MAXIMIZE                         =   0x00040,
+        FRAMEBUFFERSIZE                         =   0x00080,
+		CONTENTSCALE							=	0x00100,
         // input events
-        CHAR                                    =   0x0100,
-        CHARMOD                                 =   0x0200,
-        CURSOR_ENTER                            =   0x0400,
-        CURSOR_POSITION                         =   0x0800,
-        DROP                                    =   0x1000,
-        KEY                                     =   0x2000,
-        MOUSE_BUTTON                            =   0x4000,
-        SCROLL                                  =   0x8000
+        CHAR                                    =   0x00200,
+        CHARMOD                                 =   0x00400,
+        CURSOR_ENTER                            =   0x00800,
+        CURSOR_POSITION                         =   0x01000,
+        DROP                                    =   0x02000,
+        KEY                                     =   0x04000,
+        MOUSE_BUTTON                            =   0x08000,
+        SCROLL                                  =   0x10000
     };
 
     // overloading NOT for event types

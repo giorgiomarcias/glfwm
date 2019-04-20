@@ -188,7 +188,7 @@ namespace glfwm {
 
         /**
          *  @brief  Copy constructor.
-         *  @param  ews The EventWindowPosition to copy.
+         *  @param  ews The EventWindowSize to copy.
          */
         EventWindowSize(const EventWindowSize &ews);
 
@@ -382,6 +382,64 @@ namespace glfwm {
          *  @brief  The kind of focus activity associated to this event: got or lost focus.
          */
         const bool  focus;
+    };
+
+
+
+    /**
+     *  @brief  The EventWindowMaximize class represents a window's maximize or restore request event.
+     */
+    class EventWindowMaximize : public Event {
+    public:
+        /**
+         *  @brief  Default constructor.
+         */
+        EventWindowMaximize();
+
+        /**
+         *  @brief  Initializer constructor.
+         *  @param  id The ID of the window.
+         *  @param  m true for maximizing, false for restoring.
+         */
+        EventWindowMaximize(const WindowID id, const bool m);
+
+        /**
+         *  @brief  Copy constructor.
+         *  @param  ewm The EventWindowMaximize to copy.
+         */
+        EventWindowMaximize(const EventWindowMaximize &ewm);
+
+        /**
+         *  @brief  The move constructor is deleted, i.e. an EventWindowMaximize can not be moved.
+         *  @param  The EventWindowMaximize to move.
+         */
+        EventWindowMaximize(EventWindowMaximize &&) = delete;
+
+        /**
+         *  @brief  The copy operator is deleted, i.e. an EventWindowMaximize can not be copied.
+         *  @param  The EventWindowMaximize to copy.
+         *  @return A reference to this EventWindowMaximize.
+         */
+        EventWindowMaximize & operator =(const EventWindowMaximize &) = delete;
+
+        /**
+         *  @brief  The move operator is deleted, i.e. an EventWindowMaximize can not be moved.
+         *  @param  The EventWindowMaximize to move.
+         *  @return A reference to this EventWindowMaximize.
+         */
+        EventWindowMaximize & operator =(EventWindowMaximize &&) = delete;
+
+        /**
+         *  @brief  The toMaximize method says whether this event corresponds to a maximize or restore request.
+         *  @return true if the window should be maximizede, false if it should be restored.
+         */
+        bool toMaximize() const;
+
+    private:
+        /**
+         *  @brief  The kind of activity associated to this event: maximize or restore.
+         */
+        const bool  maximize;
     };
 
 

@@ -196,6 +196,34 @@ namespace glfwm {
     /**
      *  @brief  Default constructor.
      */
+    EventWindowMaximize::EventWindowMaximize() : Event(AllWindowIDs, EventType::WINDOW_MAXIMIZE), maximize(false) {}
+
+    /**
+     *  @brief  Initializer constructor.
+     *  @param  id The ID of the window.
+     *  @param  m true for maximizing, false for restoring.
+     */
+    EventWindowMaximize::EventWindowMaximize(const WindowID id, const bool m) : Event(id, EventType::WINDOW_MAXIMIZE), maximize(m) {}
+
+    /**
+     *  @brief  Copy constructor.
+     *  @param  ewm The EventWindowMaximize to copy.
+     */
+    EventWindowMaximize::EventWindowMaximize(const EventWindowMaximize &ewm) : Event(ewm), maximize(ewm.maximize) {}
+
+    /**
+     *  @brief  The toIconify method says whether this event corresponds to a iconify or restore request.
+     *  @return true if the window should be iconified, false if it should be restored.
+     */
+    bool EventWindowMaximize::toMaximize() const {
+        return maximize;
+    }
+
+
+
+    /**
+     *  @brief  Default constructor.
+     */
     EventWindowIconify::EventWindowIconify() : Event(AllWindowIDs, EventType::WINDOW_ICONIFY), iconify(false) {}
 
     /**
@@ -207,9 +235,9 @@ namespace glfwm {
 
     /**
      *  @brief  Copy constructor.
-     *  @param  ewf The EventWindowIconify to copy.
+     *  @param  ewi The EventWindowIconify to copy.
      */
-    EventWindowIconify::EventWindowIconify(const EventWindowIconify &ewf) : Event(ewf), iconify(ewf.iconify) {}
+    EventWindowIconify::EventWindowIconify(const EventWindowIconify &ewi) : Event(ewi), iconify(ewi.iconify) {}
 
     /**
      *  @brief  The toIconify method says whether this event corresponds to a iconify or restore request.
