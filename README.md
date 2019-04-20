@@ -49,7 +49,7 @@ There are two ways to do that.
     Then in the cmake list file `CMakeList.txt` of another project just add:
 
         ...
-        find_package(glfwm 3.2 REQUIRED)
+        find_package(glfwm 3.3 REQUIRED)
         ...
         add_executable(myexe myexe.cpp)
         target_link_libraries(myexe glfwm)
@@ -159,7 +159,7 @@ Finally, start the main loop, which ends when all the windows are closed, and re
 
 See the examples for more details.
 
-It has been tested on Mac OS X 10.9 - 10.10 - 10.11
+It has been tested on Mac OS X 10.9 - 10.10 - 10.11 - 10.12 - 10.13 - 10.14
 
 ### License
 This software is subject to the [zlib/libpng](http://opensource.org/licenses/Zlib) License.
