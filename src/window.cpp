@@ -810,6 +810,22 @@ namespace glfwm {
     }
 
     /**
+     *  @brief  The setAttribute method sets this window `attribute` to the specified `value`. See GLFW.
+     *  @param  attribute The attribute to write.
+     *  @param  The value of attribute to set for this window.
+     *  @note   This may only be called from the main thread.
+     */
+    void Window::setAttribute(const int attribute, const int value)
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (glfwWindow)
+            return glfwSetWindowAttrib(glfwWindow, attribute, value);
+    }
+
+    /**
      *  @brief  The getUserPointer method returns the user pointer for this window. See GLFW.
      *  @return The user pointer.
      */
