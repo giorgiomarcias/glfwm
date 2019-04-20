@@ -143,6 +143,8 @@ namespace glfwm {
             glfwSetWindowRefreshCallback(window->glfwWindow, windowRefreshCallback);
         if (eventTypes & EventType::WINDOW_FOCUS)
             glfwSetWindowFocusCallback(window->glfwWindow, windowFocusCallback);
+        if (eventTypes & EventType::WINDOW_MAXIMIZE)
+            glfwSetWindowMaximizeCallback(window->glfwWindow, windowMaximizeCallback);
         if (eventTypes & EventType::WINDOW_ICONIFY)
             glfwSetWindowIconifyCallback(window->glfwWindow, windowIconifyCallback);
         if (eventTypes & EventType::FRAMEBUFFERSIZE)
@@ -413,6 +415,36 @@ namespace glfwm {
         if (w) {
             w->makeContextCurrent();
             w->handleEvent(ewf);
+            w->doneCurrentContext();
+            // if this window is being rendered concurrently, update soon
+            WindowGroupID gID = WindowGroup::getWindowGroup(wID);
+#ifndef NO_MULTITHREADING
+            WindowGroupPointer g = WindowGroup::getGroup(gID);
+            if (g && g->isRunningConcurrently()) {
+                g->setWindowToUpdate(wID);
+                g->process();
+            } else {    // otherwise update all together
+                UpdateMap::setToUpdate(gID, wID);
+            }
+#else
+            UpdateMap::setToUpdate(gID, wID);
+#endif
+        }
+    }
+
+    void WindowManager::windowMaximizeCallback(GLFWwindow *glfwWindow, int toMaximize) {
+        // find the target Window
+        WindowID wID = Window::getWindowID(glfwWindow);
+        if (wID > LastWindowID) {
+            std::cout << "Warning. Maximize event received for unregistered Window. Discarded." << std::endl;
+            return;
+        }
+        // if found, make it handle the event
+        EventPointer ewi = std::make_shared<EventWindowMaximize>(wID, toMaximize == GL_TRUE);
+        WindowPointer w = Window::getWindow(wID);
+        if (w) {
+            w->makeContextCurrent();
+            w->handleEvent(ewi);
             w->doneCurrentContext();
             // if this window is being rendered concurrently, update soon
             WindowGroupID gID = WindowGroup::getWindowGroup(wID);
