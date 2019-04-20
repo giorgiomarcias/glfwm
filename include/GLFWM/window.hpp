@@ -277,6 +277,19 @@ namespace glfwm {
 		void setOpacity(float opacity);
 
         /**
+         * @brief The requestAttention method requests user attention to the specified window.
+         * 
+         * On platforms where this is not supported, attention is requested to the application as a whole.
+         * Once the user has given attention, usually by focusing the window or application, the system will
+         * end the request automatically.
+         *
+         * Note that, on macOs attention is requested to the application as a whole, not the specific window.
+         *
+         * @note   This may only be called from the main thread.
+         */
+        void requestAttention();
+
+        /**
          *  @brief  The getInputMode method returns the current value of an input mode for this Window.
          *  @param inputMode The input mode to query for its value.
          *  @return The value of the specified input mode.
