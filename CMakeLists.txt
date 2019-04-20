@@ -17,7 +17,7 @@ project(glfwm LANGUAGES CXX)
 
 # set current glfwm version
 set(GLFWM_VERSION_MAJOR "3")
-set(GLFWM_VERSION_MINOR "2")
+set(GLFWM_VERSION_MINOR "3")
 set(GLFWM_VERSION_PATCH "0")
 set(GLFWM_VERSION_TWEAK "")
 set(GLFWM_VERSION "${GLFWM_VERSION_MAJOR}.${GLFWM_VERSION_MINOR}")
@@ -31,7 +31,7 @@ get_directory_property(GLFWM_PARENT_DIRECTORY PARENT_DIRECTORY)
 # dependencies:
 
 # GLFW
-find_package(glfw3 3.2 REQUIRED)
+find_package(glfw3 3.3 REQUIRED)
 
 
 
