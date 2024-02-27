@@ -265,6 +265,22 @@ namespace glfwm {
     }
 
     /**
+    *  @brief  The getTitle method returns the current title.
+    *  @note   This may only be called from the main thread.
+    *  @return This window's current title.
+    */
+    std::string Window::getTitle() const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (glfwWindow)
+            return glfwGetWindowTitle(glfwWindow);
+        return std::string();
+    }
+
+    /**
      *  @brief  The setTitle method changes the current title.
      *  @param title The new window title.
      *  @note   This may only be called from the main thread.

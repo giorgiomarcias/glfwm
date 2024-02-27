@@ -144,6 +144,13 @@ namespace glfwm {
         void setShouldClose(const bool c);
 
         /**
+         *  @brief  The getTitle method returns the current title.
+         *  @note   This may only be called from the main thread.
+         *  @return This window's current title.
+         */
+        std::string getTitle() const;
+
+        /**
          *  @brief  The setTitle method changes the current title.
          *  @param title The new window title.
          *  @note   This may only be called from the main thread.
