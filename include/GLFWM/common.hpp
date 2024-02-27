@@ -1,4 +1,4 @@
-// Copyright (c) 2015-2016 Giorgio Marcias
+// Copyright (c) 2015-2024 Giorgio Marcias
 //
 // This file is part of GLFWM, a C++11 wrapper of GLFW with
 // multi-threading management (GLFW Manager).
@@ -15,24 +15,24 @@
 #define GLFWM_COMMON_HPP
 
 // C++ standard library
-#include <iostream>
-#include <string>
+#include <deque>
+#include <exception>
 #include <fstream>
-#include <sstream>
+#include <iostream>
 #include <iterator>
-#include <memory>
 #include <limits>
 #include <list>
-#include <vector>
+#include <memory>
 #include <queue>
-#include <deque>
+#include <sstream>
 #include <stack>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <exception>
+#include <vector>
 #ifndef NO_MULTITHREADING
-#include <mutex>
 #include <condition_variable>
+#include <mutex>
 #include <thread>
 #endif
 

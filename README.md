@@ -159,7 +159,7 @@ Finally, start the main loop, which ends when all the windows are closed, and re
 
 See the examples for more details.
 
-It has been tested on Mac OS X 10.9 - 10.10 - 10.11 - 10.12 - 10.13 - 10.14
+It has been tested on macOS's: 10.9 - 10.10 - 10.11 - 10.12 - 10.13 - 10.14 - 14.3
 
 ### License
 This software is subject to the [zlib/libpng](http://opensource.org/licenses/Zlib) License.

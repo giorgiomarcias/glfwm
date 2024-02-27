@@ -1,4 +1,4 @@
-# Copyright (c) 2015-2016 Giorgio Marcias
+# Copyright (c) 2015-2024 Giorgio Marcias
 #
 # This file is part of GLFWM, a C++11 wrapper of GLFW with
 # multi-threading management (GLFW Manager).
@@ -11,7 +11,7 @@
 # Author: Giorgio Marcias
 # email: marcias.giorgio@gmail.com
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5)
 project(glfwmExample LANGUAGES CXX)
 
 # find GLFWM

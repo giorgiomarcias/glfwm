@@ -1,4 +1,4 @@
-// Copyright (c) 2015-2016 Giorgio Marcias
+// Copyright (c) 2015-2024 Giorgio Marcias
 //
 // This file is part of GLFWM, a C++11 wrapper of GLFW with
 // multi-threading management (GLFW Manager).
@@ -18,54 +18,59 @@
 
 namespace glfwm {
 
-    /**
-     *  @brief  The UpdateMap class represents a global map specifically designed for the signaling
-     *          between WindowManager and WindowGroups.
-     */
-    class UpdateMap {
-    public:
-        /**
-         *  @brief  The notify static method is used to wake up the WindowManager and send a signal to a Window or WindowGroup target to update itself.
-         *  @param gID The ID of the WindowGroup to update. It is ignored unless wID is WholeGroupWindowIDs or AllWindowIDs, otherwise it must be a valid ID.
-         *  @param wID The ID of the Window to update, or WholeGroupWindowIDs for an entire group, or AllWindowIDs for all Windows.
-         */
-        static void notify(const WindowGroupID gID = AnyWindowGroupID, const WindowID wID = AllWindowIDs);
+	/**
+	 *  @brief  The UpdateMap class represents a global map specifically designed for the signaling
+	 *          between WindowManager and WindowGroups.
+	 */
+	class UpdateMap {
+	  public:
+		/**
+		 *  @brief  The notify static method is used to wake up the WindowManager and send a signal to a Window or
+		 * WindowGroup target to update itself.
+		 *  @param gID The ID of the WindowGroup to update. It is ignored unless wID is WholeGroupWindowIDs or
+		 * AllWindowIDs, otherwise it must be a valid ID.
+		 *  @param wID The ID of the Window to update, or WholeGroupWindowIDs for an entire group, or AllWindowIDs for
+		 * all Windows.
+		 */
+		static void notify(const WindowGroupID gID = AnyWindowGroupID, const WindowID wID = AllWindowIDs);
 
-    private:
-        friend class WindowManager;
+	  private:
+		friend class WindowManager;
 
-        /**
-         *  @brief  The setToUpdate static method is used to collect a Window or WindowGroup target to update itself.
-         *  @param gID The ID of the WindowGroup to update. It is ignored unless wID is WholeGroupWindowIDs or AllWindowIDs, otherwise it must be a valid ID.
-         *  @param wID The ID of the Window to update, or WholeGroupWindowIDs for an entire group, or AllWindowIDs for all Windows.
-         */
-        static void setToUpdate(const WindowGroupID gID = AnyWindowGroupID, const WindowID wID = AllWindowIDs);
+		/**
+		 *  @brief  The setToUpdate static method is used to collect a Window or WindowGroup target to update itself.
+		 *  @param gID The ID of the WindowGroup to update. It is ignored unless wID is WholeGroupWindowIDs or
+		 * AllWindowIDs, otherwise it must be a valid ID.
+		 *  @param wID The ID of the Window to update, or WholeGroupWindowIDs for an entire group, or AllWindowIDs for
+		 * all Windows.
+		 */
+		static void setToUpdate(const WindowGroupID gID = AnyWindowGroupID, const WindowID wID = AllWindowIDs);
 
-        /**
-         *  @brief  The popGroup static method is used by WindowManager to get the next group to wake up.
-         *  @param  gID The output WindowGrupID of the group to update.
-         *  @param  wIDs The output WindowIDs of the group to update.
-         */
-        static void popGroup(WindowGroupID &gID, std::unordered_set<WindowID> &wIDs);
+		/**
+		 *  @brief  The popGroup static method is used by WindowManager to get the next group to wake up.
+		 *  @param  gID The output WindowGrupID of the group to update.
+		 *  @param  wIDs The output WindowIDs of the group to update.
+		 */
+		static void popGroup(WindowGroupID& gID, std::unordered_set<WindowID>& wIDs);
 
-        /**
-         *  @brief  The empty static methos says if the queue is currently empty.
-         *  @return true if empty, false otherwise.
-         */
-        static bool empty();
+		/**
+		 *  @brief  The empty static methos says if the queue is currently empty.
+		 *  @return true if empty, false otherwise.
+		 */
+		static bool empty();
 
-        /**
-         *  @brief  The queue of Events.
-         */
-        static std::unordered_map<WindowGroupID, std::unordered_set<WindowID>>      groups_windows;
+		/**
+		 *  @brief  The queue of Events.
+		 */
+		static std::unordered_map<WindowGroupID, std::unordered_set<WindowID>> groups_windows;
 
 #ifndef NO_MULTITHREADING
-        /**
-         *  @brief  Mutex used to guarantee exclusive access to the elements in the queue.
-         */
-        static std::mutex                                                           globalMutex;
+		/**
+		 *  @brief  Mutex used to guarantee exclusive access to the elements in the queue.
+		 */
+		static std::mutex globalMutex;
 #endif
-    };
+	};
 }
 
 #endif
