@@ -971,6 +971,247 @@ namespace glfwm {
     }
 #endif
 
+#ifdef GLFW_EXPOSE_NATIVE_WIN32
+    /**
+    *  @brief Get the Win32 handle associated to this Window.
+    *  @note Be sure not to access such object after destroying this Window.
+    *  @return The Win32 handle associated to this Window.
+    */
+    HWND Window::getWin32Window() const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return NULL;
+        return glfwGetWin32Window(glfwWindow);
+    }
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_COCOA
+    /**
+     *  @brief Get the NSWindow associated to this Window.
+     *  @note Be sure not to access such object after destroying this Window.
+     *  @return The NSWindow associated to this Window.
+     */
+    id Window::getCocoaWindow() const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return nil;
+        return glfwGetCocoaWindow(glfwWindow);
+    }
+
+    /**
+     *  @brief Get the NSView id associated to this Window.
+     *  @note Be sure not to access such object after destroying this Window.
+     *  @return The NSView id associated to this Window.
+     */
+    id Window::getCocoaView() const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return nil;
+        return glfwGetCocoaView(glfwWindow);
+    }
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_X11
+        /**
+         *  @brief Get the X11's Window associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return The X11's Window associated to this Window.
+         */
+        ::Window Window::getX11Widow() const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return None;
+        return glfwGetX11Window(glfwWindow);
+    }
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_WAYLAND
+    /**
+     *  @brief Get the Wayland's wl_surface associated to this Window.
+     *  @note Be sure not to access such object after destroying this Window.
+     *  @return The Wayland's wl_surface associated to this Window.
+     */
+    struct wl_surface* Window::getWaylandWidow() const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return nullptr;
+        return glfwGetWaylandWindow(glfwWindow);
+    }
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_WGL
+    /**
+     *  @brief Get the WGL's context associated to this Window.
+     *  @note Be sure not to access such object after destroying this Window.
+     *  @return The WGL's context associated to this Window.
+     */
+    HGLRC Window::getWGLContext() const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return NULL;
+        return glfwGetWGLContext(glfwWindow);
+    }
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_NSGL
+    /**
+     *  @brief Get the NSOpenGLContext associated to this Window.
+     *  @note Be sure not to access such object after destroying this Window.
+     *  @return The NSOpenGLContext associated to this Window.
+     */
+    id Window::getNSGLContext() const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return nil;
+        return glfwGetNSGLContext(glfwWindow);
+    }
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_GLX
+    /**
+     *  @brief Get the GLX's context associated to this Window.
+     *  @note Be sure not to access such object after destroying this Window.
+     *  @return The GLX's context associated to this Window.
+     */
+    GLXContext Window::getGLXContext() const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return NULL;
+        return glfwGetGLXContext(glfwWindow);
+    }
+
+        /**
+     *  @brief Get the GLX's window associated to this Window.
+     *  @note Be sure not to access such object after destroying this Window.
+     *  @return The GLX's window associated to this Window.
+     */
+    GLXWindow Window::getGLXContext() const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return None;
+        return glfwGetGLXWindow(glfwWindow);
+    }
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_EGL
+    /**
+     *  @brief Get the EGL's context associated to this Window.
+     *  @note Be sure not to access such object after destroying this Window.
+     *  @return The EGL's context associated to this Window.
+     */
+    EGLContext Window::getEGLContext() const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return EGL_NO_CONTEXT;
+        return glfwGetEGLContext(glfwWindow);
+    }
+
+    /**
+     *  @brief Get the EGL's surface associated to this Window.
+     *  @note Be sure not to access such object after destroying this Window.
+     *  @return The EGL's surface associated to this Window.
+     */
+    EGLSurface Window::getEGLSurface() const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return EGL_NO_SURFACE;
+        return glfwGetEGLSurface(glfwWindow);
+    }
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_OSMESA
+    /**
+     *  @brief Get the Mesa's color buffer associated to this Window.
+     *  @note Be sure not to access such object after destroying this Window.
+     *  @return GLFW_TRUE if successful, GLFW_FALSE otherwise.
+     */
+    int Window::getOSMesaColorBuffer(int *width, int *height, int *format, void **buffer) const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return GLFW_FALSE;
+        return glfwGetOSMesaColorBuffer(glfwWindow, width, height, format, buffer);
+    }
+
+    /**
+     *  @brief Get the Mesa's depth buffer associated to this Window.
+     *  @note Be sure not to access such object after destroying this Window.
+     *  @return GLFW_TRUE if successful, GLFW_FALSE otherwise.
+     */
+    int Window::getOSMesaDepthBuffer(int *width, int *height, int *bytesPerValue, void **buffer) const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return GLFW_FALSE;
+        return glfwGetOSMesaDepthBuffer(glfwWindow, width, height, bytesPerValue, buffer);
+    }
+
+    /**
+     *  @brief Get the Mesa's OSMesaContext associated to this Window.
+     *  @note Be sure not to access such object after destroying this Window.
+     *  @return The Mesa's OSMesaContext associated to this Window.
+     */
+    OSMesaContext Window::getOSMesaContext() const
+    {
+#ifndef NO_MULTITHREADING
+        // acquire ownership
+        std::lock_guard<std::recursive_mutex> lock(mutexes[sharedMutexID].mutex);
+#endif
+        if (!glfwWindow)
+            return NULL;
+        return glfwGetOSMesaContext(glfwWindow);
+    }
+#endif
 
 
 #ifndef NO_MULTITHREADING

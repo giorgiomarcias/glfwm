@@ -516,6 +516,121 @@ namespace glfwm {
         VkResult createVulkanWindowSurface(VkInstance instance, const VkAllocationCallbacks * allocator, VkSurfaceKHR *surface);
 #endif
 
+#ifdef GLFW_EXPOSE_NATIVE_WIN32
+        /**
+         *  @brief Get the Win32 handle associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return The Win32 handle associated to this Window.
+         */
+        HWND getWin32Window() const;
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_COCOA
+        /**
+         *  @brief Get the NSWindow associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return The NSWindow associated to this Window.
+         */
+        id getCocoaWindow() const;
+
+        /**
+         *  @brief Get the NSView id associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return The NSView id associated to this Window.
+         */
+        id getCocoaView() const;
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_X11
+        /**
+         *  @brief Get the X11's Window associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return The X11's Window associated to this Window.
+         */
+        ::Window getX11Widow() const;
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_WAYLAND
+        /**
+         *  @brief Get the Wayland's wl_surface associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return The Wayland's wl_surface associated to this Window.
+         */
+        struct wl_surface* getWaylandWidow() const;
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_WGL
+        /**
+         *  @brief Get the WGL's context associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return The WGL's context associated to this Window.
+         */
+        HGLRC getWGLContext() const;
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_NSGL
+        /**
+         *  @brief Get the NSOpenGLContext associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return The NSOpenGLContext associated to this Window.
+         */
+        id getNSGLContext() const;
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_GLX
+        /**
+         *  @brief Get the GLX's context associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return The GLX's context associated to this Window.
+         */
+        GLXContext getGLXContext() const;
+
+        /**
+         *  @brief Get the GLX's window associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return The GLX's window associated to this Window.
+         */
+        GLXWindow getGLXWindow() const;
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_EGL
+        /**
+         *  @brief Get the EGL's context associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return The EGL's context associated to this Window.
+         */
+        EGLContext getEGLContext() const;
+
+        /**
+         *  @brief Get the EGL's surface associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return The EGL's surface associated to this Window.
+         */
+        EGLSurface getEGLSurface() const;
+#endif
+
+#ifdef GLFW_EXPOSE_NATIVE_OSMESA
+        /**
+         *  @brief Get the Mesa's color buffer associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return GLFW_TRUE if successful, GLFW_FALSE otherwise.
+         */
+        int getOSMesaColorBuffer(int *width, int *height, int *format, void **buffer) const;
+
+        /**
+         *  @brief Get the Mesa's depth buffer associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return GLFW_TRUE if successful, GLFW_FALSE otherwise.
+         */
+        int getOSMesaDepthBuffer(int *width, int *height, int *bytesPerValue, void **buffer) const;
+
+        /**
+         *  @brief Get the Mesa's OSMesaContext associated to this Window.
+         *  @note Be sure not to access such object after destroying this Window.
+         *  @return The Mesa's OSMesaContext associated to this Window.
+         */
+        OSMesaContext getOSMesaContext() const;
+#endif
 
 
     private:
