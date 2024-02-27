@@ -11,13 +11,13 @@
 # Author: Giorgio Marcias
 # email: marcias.giorgio@gmail.com
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5)
 
 project(glfwm LANGUAGES CXX)
 
 # set current glfwm version
 set(GLFWM_VERSION_MAJOR "3")
-set(GLFWM_VERSION_MINOR "3")
+set(GLFWM_VERSION_MINOR "4")
 set(GLFWM_VERSION_PATCH "0")
 set(GLFWM_VERSION_TWEAK "")
 set(GLFWM_VERSION "${GLFWM_VERSION_MAJOR}.${GLFWM_VERSION_MINOR}")
@@ -31,7 +31,7 @@ get_directory_property(GLFWM_PARENT_DIRECTORY PARENT_DIRECTORY)
 # dependencies:
 
 # GLFW
-find_package(glfw3 3.3 REQUIRED)
+find_package(glfw3 3.4 REQUIRED)
 
 
 
